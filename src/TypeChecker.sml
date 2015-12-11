@@ -213,8 +213,14 @@ and checkExp ftab vtab (exp : In.Exp)
          end
                
     | In.Map (f, arr_exp, _, _, pos)
-      => raise Fail "Unimplemented feature map"
-               
+      => let val (e_type, arr_exp_dec) = checkExp ftab vtab arr_exp
+             val ftype = rtpFunArg(f, ftab, pos)
+                in case e_type of Array ftype => ftype
+                          | _ => raise Error("Map: wrong argument type " ^ pos)
+                end
+         
+
+          
     | In.Reduce (f, n_exp, arr_exp, _, pos)
       => raise Fail "Unimplemented feature reduce"
 

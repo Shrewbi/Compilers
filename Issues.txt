@@ -1,0 +1,3 @@
+Typechecker.sml
+	AND
+	OR
