@@ -33,6 +33,7 @@ open Fasto.UnknownTypes
 %type <Fasto.Param list> Params
 %type <Fasto.UnknownTypes.Exp> Exp
 %type <Fasto.UnknownTypes.Exp list> Exps
+%type <Fasto.UnknownTypes.FunArg> FunArg
 
 %%
 
@@ -90,11 +91,11 @@ Exp :     NUM            { Constant (IntVal (#1 $1), #2 $1) }
         | IOTA LPAR Exp RPAR
                         { Iota ($3, $1)}
 
-        | MAP LPAR FunArg Exp RPAR
-                        { Map ($3, $4, $1) }
+        | MAP LPAR FunArg COMMA Exp RPAR
+                        { Map ($3, $5, (), (),  $1) }
 
-        | REDUCE LPAR FunArg Exp Exp RPAR
-                        { Reduce ($3, $4, $5, $1)}
+        | REDUCE LPAR FunArg COMMA Exp COMMA Exp RPAR
+                        { Reduce ($3, $5, $7, (), $1)}
 ;
 
 Exps : Exp COMMA Exps   { $1 :: $3 }

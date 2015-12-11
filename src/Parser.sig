@@ -79,3 +79,5 @@ datatype token =
   | WRITE of t__38__
 end;
 
+val Prog :
+  (Lexing.lexbuf -> token) -> Lexing.lexbuf -> Fasto.UnknownTypes.Prog;
