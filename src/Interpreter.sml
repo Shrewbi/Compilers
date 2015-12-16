@@ -269,9 +269,15 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         end
 
   | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) =
-        let val (farg', farg_ret) = evalFunArg(farg, vtab, ftab, pos, _)
-            val arr = evalExp(arrexp, vtab, ftab)
-        in  raise Fail "Unimplemented feature map"
+        let val arr  = evalExp(arrexp, vtab, ftab)
+            val farg_ret_type = rtpFunArg (farg, ftab, pos)
+        in case arr of
+               ArrayVal (lst,tp1) =>
+               let val mlst = map (fn x => evalFunArg (farg, vtab, ftab, pos, [x])) lst
+               in  ArrayVal (mlst, farg_ret_type)
+               end
+             | otherwise => raise Error("Map: Wrong argument: "
+                                        ^ppVal 0 arr, pos)
         end
 
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
