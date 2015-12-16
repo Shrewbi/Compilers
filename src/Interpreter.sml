@@ -281,7 +281,15 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         end
 
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
-    raise Fail "Unimplemented feature reduce"
+            let val arr  = evalExp(arrexp, vtab, ftab)
+                val e  = evalExp(ne, vtab, ftab)
+                val farg_ret_type = rtpFunArg (farg, ftab, pos)
+        in case arr of
+               ArrayVal (lst,tp1) =>
+               foldl (fn (x,y) => evalFunArg (farg, vtab, ftab, pos, [x,y])) e lst
+             | _ => raise Error("Map: Wrong argument: "
+                                        ^ppVal 0 arr, pos)
+        end
 
   | evalExp ( Read (t,p), vtab, ftab ) =
         let val str =
