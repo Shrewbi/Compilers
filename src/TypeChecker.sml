@@ -247,15 +247,15 @@ and checkExp ftab vtab (exp : In.Exp)
       => let val (a_type, arr_exp_dec) = checkExp ftab vtab arr_exp
              val e_type = 
               case a_type of Array r => r
-                          |  _ => raise Error("Map: wrong argument type " ^ ppType a_type, pos)
+                          |  _ => raise Error("Reduce: wrong argument type " ^ ppType a_type, pos)
              val (n_type, n_exp_dec) = checkExp ftab vtab n_exp
              val (f', f_ret, f_arg) = 
               case checkFunArg (f, vtab, ftab, pos) of
                 (f', ret, [t]) => (f', ret, t)
-               | (_,  ret, args) => raise Error("Map: wrong argument type " ^ ppType e_type, pos)
+               | (_,  ret, args) => raise Error("Reduce: wrong argument type " ^ ppType e_type, pos)
           in if (e_type = f_arg andalso n_type = f_arg)
              then (e_type, Out.Reduce (f', n_exp_dec, arr_exp_dec, e_type, pos))
-             else raise Error ("Map: incompatible arguments " ^ ppType e_type, pos)
+             else raise Error ("Reduce: incompatible arguments " ^ ppType e_type, pos)
           end
 
 and checkFunArg (In.FunName fname, vtab, ftab, pos) =

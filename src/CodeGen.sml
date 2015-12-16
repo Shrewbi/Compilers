@@ -153,7 +153,7 @@ fun applyRegs( fid: string,
 (* Compile 'e' under bindings 'vtable', putting the result in its 'place'. *)
 fun compileExp e vtable place =
   case e of
-      Constant (IntVal n, pos) =>
+    Constant (IntVal n, pos) =>
       if n < 0 then
           compileExp (Negate (Constant (IntVal (~n), pos), pos)) vtable place
       else if n < 32768 then
@@ -231,7 +231,6 @@ fun compileExp e vtable place =
           val code2 = compileExp e2 vtable t2
       in  code1 @ code2 @ [Mips.SUB (place,t1,t2)]
       end
-
   | Times (e1, e2, pos) =>
       let val t1 = newName "minus_L"
           val t2 = newName "minus_R"

@@ -269,7 +269,10 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         end
 
   | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) =
-    raise Fail "Unimplemented feature map"
+        let val (farg', farg_ret) = evalFunArg(farg, vtab, ftab, pos, _)
+            val arr = evalExp(arrexp, vtab, ftab)
+        in  raise Fail "Unimplemented feature map"
+        end
 
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
     raise Fail "Unimplemented feature reduce"
