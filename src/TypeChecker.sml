@@ -115,7 +115,7 @@ and checkExp ftab vtab (exp : In.Exp)
          end
 
     | In.And (e1, e2, pos)
-       => let val (t1, e1_dec) = checkExp ftab vtab e1
+      => let val (t1, e1_dec) = checkExp ftab vtab e1
           in if t1 = Bool
             then let val (t2, e2_dec) = checkExp ftab vtab e2
              in if t2 = Bool then (Bool, Out.And(e1_dec, e2_dec, pos))
@@ -124,10 +124,20 @@ and checkExp ftab vtab (exp : In.Exp)
           end
 
     | In.Or (e1, e2, pos)
-      => raise Fail "Unimplemented feature or"
+      => let val (t1, e1_dec) = checkExp ftab vtab e1
+          in if t1 = Bool
+            then let val (t2, e2_dec) = checkExp ftab vtab e2
+              in if t2 = Bool then (Bool, Out.Or(e1_dec, e2_dec, pos))
+              else raise Error (("Wrong type: " ^ ppType t2), pos) end
+          else raise Error (("Wrong type: " ^ ppType t1), pos)
+          end
 
     | In.Not (e, pos)
-      => raise Fail "Unimplemented feature not"
+      => let val (t, e_dec) = checkExp ftab vtab e
+          in if t = Bool then (Bool, Out.Not(e_dec, pos))
+          else raise Error (("Wrong type: " ^ ppType t), pos) 
+          end
+
 
     | In.Negate (e, pos)
       => raise Fail "Unimplemented feature negate"
