@@ -138,10 +138,11 @@ and checkExp ftab vtab (exp : In.Exp)
           else raise Error (("Wrong type: " ^ ppType t), pos) 
           end
 
-
     | In.Negate (e, pos)
-      => raise Fail "Unimplemented feature negate"
-
+      => let val (t, e_dec) = checkExp ftab vtab e
+          in if t = Bool then (Bool, Out.Negate(e_dec, pos))
+          else raise Error (("Wrong type: " ^ ppType t), pos) 
+          end
     (* The types for e1, e2 must be the same. The result is always a Bool. *)
     | In.Equal (e1, e2, pos)
       => let val (t1, e1') = checkExp ftab vtab e1
@@ -241,10 +242,21 @@ and checkExp ftab vtab (exp : In.Exp)
              then (Array f_ret, Out.Map (f', arr_exp_dec, e_type, f_ret, pos))
              else raise Error ("Map: incompatible arguments " ^ ppType e_type, pos)
           end
-
           
     | In.Reduce (f, n_exp, arr_exp, _, pos)
-      => raise Fail "Unimplemented feature reduce"
+      => let val (a_type, arr_exp_dec) = checkExp ftab vtab arr_exp
+             val e_type = 
+              case a_type of Array r => r
+                          |  _ => raise Error("Map: wrong argument type " ^ ppType a_type, pos)
+             val (n_type, n_exp_dec) = checkExp ftab vtab n_exp
+             val (f', f_ret, f_arg) = 
+              case checkFunArg (f, vtab, ftab, pos) of
+                (f', ret, [t]) => (f', ret, t)
+               | (_,  ret, args) => raise Error("Map: wrong argument type " ^ ppType e_type, pos)
+          in if (e_type = f_arg andalso n_type = f_arg)
+             then (e_type, Out.Reduce (f', n_exp_dec, arr_exp_dec, e_type, pos))
+             else raise Error ("Map: incompatible arguments " ^ ppType e_type, pos)
+          end
 
 and checkFunArg (In.FunName fname, vtab, ftab, pos) =
     (case SymTab.lookup fname ftab of
