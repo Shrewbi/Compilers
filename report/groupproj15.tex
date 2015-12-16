@@ -1,0 +1,117 @@
+\documentclass{article}
+
+\title{Compilers, group project}
+\author{Martin Thiele, Dániel Eythorsson & Alexander Mathiesen}
+
+\begin{document}
+
+%\maketitle
+
+\section{Introduction}
+We have decided to divide this report into three parts, one for each task. Each of this parts will then cover the different implementations we have made, the changes we have made to the different files, as well as any problems we may have encountered.
+\section{Warm up implementations}
+For the first task of the assignment we were asked to implement multiplication, division, boolean operators and literals. We have modified the following files: Lexer.lex, Parser.grm, Interpreter.sml, TypeChecker.sml and CodeGen.sml.
+\subsection{Boolean literals}
+\subsubsection{Lexer.lex}
+We added "true" and "false" cases to the keyword function. We assume the implementation of boolean values in the parser phase to handle both "true" and "false" and take these as extra an extra parameter alongside the position:
+\begin{verbatim}
+		| "true" 		=> Parser.BOOLVAL(true, pos)
+		| "false"		=> Parser.BOOLVAL(false, pos)
+\end{verbatim}
+\subsubsection{Parser.grm}
+We added a token "BOOLVAL" to the list and defined it to take two arguments; a boolean value and a position, which is a tuple of integers:
+\begin{verbatim}
+%token <(bool*(int*int))> BOOLVAL
+\end{verbatim}
+\subsubsection{Interpreter.sml}
+No modifications were needed in this file. 
+\subsubsection{TypeChecker.sml}
+No modifications were needed in this file.
+\subsubsection{CodeGen.sml}
+We implemented booleans in the "Constant" case of the "compileExp" function. It takes a boolean expression \(b\) and a position as parameters. If \(b\) evaluates to true, then it loads the value 1, and 0 otherwise. It uses the MIPS instruction "load immediate": 
+\begin{verbatim}
+	| Constant (BoolVal b, pos) =>
+		if b then [ Mips.LI (place, makeConst 1) ]
+		else [ Mips.LI (place, makeConst 0) ]
+\end{verbatim}
+\subsection{Multiplication and division}
+\subsubsection{Lexer.lex}
+We added "*" and "/" cases to the keyword function. We assume the implementation in the parser phase takes a single argument; its position which is a tuple of integers:
+\begin{verbatim}
+       | "*"            => Parser.MULT pos
+       | "/"            => Parser.DIV pos
+\end{verbatim}
+\subsubsection{Parser.grm}
+We modified the token that handles the binary operators such as plus and minus etc. to also handle multiplication and division: 
+\begin{verbatim}
+%token <(int*int)> PLUS MINUS DEQ EQ LTH MULT DIV 
+\end{verbatim}
+\subsubsection{Interpreter.sml}
+We added cases to the "evalExp" function to handle multiplication ("Times") and division ("Divide"). They take as parameters two expressions, a position and two symbol tables. They then evaluate the two expressions and make sure that both are integer types before carrying out the respective operation: 
+\begin{verbatim}
+  | evalExp ( Times(e1, e2, pos), vtab, ftab ) =
+        let val res1   = evalExp(e1, vtab, ftab)
+            val res2   = evalExp(e2, vtab, ftab)
+        in  case (res1, res2) of
+              (IntVal n1, IntVal n2) => IntVal (n1*n2)
+            | _ => invalidOperands "Multiplication on non-integral args: " 
+            [(Int, Int)] res1 res2 pos
+        end
+
+  | evalExp ( Divide(e1, e2, pos), vtab, ftab ) = 
+        let val res1   = evalExp(e1, vtab, ftab)
+            val res2   = evalExp(e2, vtab, ftab)
+        in  case (res1, res2) of
+              (IntVal n1, IntVal n2) => IntVal (n1 div n2)
+            | _ => invalidOperands "Division on non-integral args: " 
+            [(Int, Int)] res1 res2 pos
+        end
+\end{verbatim}
+\subsubsection{TypeChecker.sml}
+We added cases to the "checkExp" function to handle multiplication ("Times") and division ("Divide"). They take as parameters two expressions and a position. Then the "checkBinOp" function is invoked to make sure both expressions are of the same, correct type:
+\begin{verbatim}
+    | In.Times (e1, e2, pos)
+      => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
+         in (Int,
+             Out.Times (e1_dec, e2_dec, pos))
+         end
+    | In.Divide (e1, e2, pos)
+      => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
+         in (Int,
+             Out.Divide (e1_dec, e2_dec, pos))
+         end
+\end{verbatim}
+\subsubsection{CodeGen.sml}
+We implemented multiplication and division by adding them as cases to the "compileExp" function. It then evaluates each expression and invokes the Mips instructions "MUL" and "DIV" respectively. 
+\begin{verbatim}
+  | Times (e1, e2, pos) =>
+      let val t1 = newName "minus_L"
+          val t2 = newName "minus_R"
+          val code1 = compileExp e1 vtable t1
+          val code2 = compileExp e2 vtable t2
+      in  code1 @ code2 @ [Mips.MUL (place,t1,t2)]
+      end
+  | Divide (e1, e2, pos) =>
+      let val t1 = newName "minus_L"
+          val t2 = newName "minus_R"
+          val code1 = compileExp e1 vtable t1
+          val code2 = compileExp e2 vtable t2
+      in  code1 @ code2 @ [Mips.DIV (place,t1,t2)]
+      end
+\end{verbatim}
+\subsection{AND and OR}
+\subsubsection{Lexer.lex}
+\subsubsection{Parser.grm}
+\subsubsection{Interpreter.sml}
+\subsubsection{TypeChecker.sml}
+\subsubsection{CodeGen.sml}
+\subsection{Not and negation}
+\subsubsection{Lexer.lex}
+\subsubsection{Parser.grm}
+\subsubsection{Interpreter.sml}
+\subsubsection{TypeChecker.sml}
+\subsubsection{CodeGen.sml}
+
+\section{Array combinators}
+
+\end{document}
