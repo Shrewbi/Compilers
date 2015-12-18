@@ -518,30 +518,32 @@ fun compileExp e vtable place =
         val tmp_reg  = newName "tmp_reg"
         val loop_beg = newName "loop_beg"
         val loop_end = newName "loop_end"
+        val res_reg  = newName "res_reg"
         val arr_code = compileExp arr_exp vtable arr_reg
 
-        val offset   = case getElemSize elem_type of
-                                   One => "1"
-                                 | Four => "4"
         val get_size = [ Mips.LW (size_reg, arr_reg, "0")]
 
-        val init_regs = [ Mips.ADDI (addr_reg, place, offset)
+        val init_regs = [ Mips.ADDI (addr_reg, place, "4")
                         , Mips.MOVE (i_reg, "0")
-                        , Mips.ADDI (elem_reg, arr_reg, offset) ]
+                        , Mips.ADDI (elem_reg, arr_reg, "4") ]
         
         val loop_header = [ Mips.LABEL (loop_beg)
                           , Mips.SUB (tmp_reg, i_reg, size_reg)
                           , Mips.BGEZ (tmp_reg, loop_end) ]
 
 
-
+        val loop_map0 = case getElemSize elem_type of
+                    One  => Mips.LB(res_reg, elem_reg, "0")::
+                            applyFunArg(farg, [res_reg], vtable, res_reg, pos)
+                            @ [ Mips.ADDI(elem_reg, elem_reg, "1")]
+                    Four => 
         val load_val =    Mips.LW(tmp_reg, arr_reg, "0")
         val loop_map =    applyRegs(farg, [tmp_reg], tmp_reg, pos)
         val save_val =    Mips.SW(tmp_reg, addr_reg, "0")
 
-        val loop_footer = [ Mips.ADDI (addr_reg, addr_reg, offset)
+        val loop_footer = [ Mips.ADDI (addr_reg, addr_reg, "4")
                           , Mips.ADDI (i_reg, i_reg, "1")
-                          , Mips.ADDI (tmp_reg, tmp_reg, offset)
+                          , Mips.ADDI (tmp_reg, tmp_reg, "4")
                           , Mips.J (loop_beg)
                           , Mips.LABEL (loop_end)]
 
@@ -560,15 +562,15 @@ fun compileExp e vtable place =
 
 (* Lambda helper function *)
 
-  and applyFunArg (FunName s, args, vtable, place, pos) : Mips.Prog =
+and applyFunArg (FunName s, args, vtable, place, pos) : Mips.Prog =
       let val tmp_reg = newName "tmp_reg"
       in  applyRegs(s, args, tmp_reg, pos) @ [Mips.MOVE(place, tmp_reg)] end
 
     | applyFunArg (Lambda (_, params, body, fpos), args, vtable, place, pos) =
       let val tmp_reg = newName "tmp_reg"
-          fun bindArgToVtable (Param (pn, pt), arg, vtab) = SymTab.bind pn arg vtab
-          val vtab' = ListPair.foldr bindArgToVtable vtab (params, args)
-          val code = compileExp body vtab' tmp_reg
+          fun bindArgToVtable (Param(pn, pt), arg, vtable) = SymTab.bind pn arg vtable
+          val vtable' = ListPair.foldr bindArgToVtable vtable (params, args)
+          val code = compileExp body vtable' tmp_reg
       in
          code @ [Mips.MOVE(place, tmp_reg)]
       end
