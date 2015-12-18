@@ -525,9 +525,9 @@ fun compileExp e vtable place =
         val loop_beg =    newName "loop_beg"
         val loop_end =    newName "loop_end"
         val tmp_reg  =    newName "tmp_reg"
-          val loop_header = [ Mips.LABEL (loop_beg)
-                            , Mips.SUB (tmp_reg, i_reg, size_reg)
-                            , Mips.BGEZ (tmp_reg, loop_end) ]
+        val loop_header = [ Mips.LABEL (loop_beg)
+                          , Mips.SUB (tmp_reg, i_reg, size_reg)
+                          , Mips.BGEZ (tmp_reg, loop_end) ]
         
         val loop_map =    [  ]
 

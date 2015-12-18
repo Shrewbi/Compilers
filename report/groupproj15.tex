@@ -1,11 +1,21 @@
-\documentclass{article}
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc} % æøå
+\usepackage[T1]{fontenc} % mere æøå
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage{mdwlist}
+\usepackage{graphicx}
 
-\title{Compilers, group project}
-\author{Martin Thiele, Dániel Eythorsson & Alexander Mathiesen}
+\title{Oversættere Group milestone}
+\author{Martin Thiele, Alexander Mathiesen, Daniel Eyþórsson}
+\date{\parbox{\linewidth}{\centering%
+  15. december 2015\endgraf\bigskip
+  Studienummer: mqn507, pkq530, kzs773\endgraf\medskip
+  Email: <Studienummer> @alumni.ku.dk\\
+  Oversættere \endgraf}}
 
 \begin{document}
-
-%\maketitle
+\maketitle
 
 \section{Introduction}
 We have decided to divide this report into three parts, one for each task. Each of this parts will then cover the different implementations we have made, the changes we have made to the different files, as well as any problems we may have encountered.
@@ -15,8 +25,8 @@ For the first task of the assignment we were asked to implement multiplication, 
 \subsubsection{Lexer.lex}
 We added "true" and "false" cases to the keyword function. We assume the implementation of boolean values in the parser phase to handle both "true" and "false" and take these as extra an extra parameter alongside the position:
 \begin{verbatim}
-		| "true" 		=> Parser.BOOLVAL(true, pos)
-		| "false"		=> Parser.BOOLVAL(false, pos)
+    | "true"    => Parser.BOOLVAL(true, pos)
+    | "false"   => Parser.BOOLVAL(false, pos)
 \end{verbatim}
 \subsubsection{Parser.grm}
 We added a token "BOOLVAL" to the list and defined it to take two arguments; a boolean value and a position, which is a tuple of integers:
@@ -30,9 +40,9 @@ No modifications were needed in this file.
 \subsubsection{CodeGen.sml}
 We implemented booleans in the "Constant" case of the "compileExp" function. It takes a boolean expression \(b\) and a position as parameters. If \(b\) evaluates to true, then it loads the value 1, and 0 otherwise. It uses the MIPS instruction "load immediate": 
 \begin{verbatim}
-	| Constant (BoolVal b, pos) =>
-		if b then [ Mips.LI (place, makeConst 1) ]
-		else [ Mips.LI (place, makeConst 0) ]
+  | Constant (BoolVal b, pos) =>
+    if b then [ Mips.LI (place, makeConst 1) ]
+    else [ Mips.LI (place, makeConst 0) ]
 \end{verbatim}
 \subsection{Multiplication and division}
 \subsubsection{Lexer.lex}
@@ -99,19 +109,161 @@ We implemented multiplication and division by adding them as cases to the "compi
       in  code1 @ code2 @ [Mips.DIV (place,t1,t2)]
       end
 \end{verbatim}
+\clearpage
 \subsection{AND and OR}
 \subsubsection{Lexer.lex}
+We added "and" as well as "or" to the keyword function. We assume the implementation in the parser phase takes a single argument; its position which is a tuple of integers:
+\begin{verbatim}
+       | "and"          => Parser.AND pos
+       | "or"           => Parser.OR pos
+\end{verbatim}
 \subsubsection{Parser.grm}
+We modified the token that handles if-then-else statements to also handle AND as well as OR
+\begin{verbatim}
+%token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND OR
+\end{verbatim}
+
 \subsubsection{Interpreter.sml}
+We added cases to the "evalExp" function to handle AND (And) as well as OR (Or). They take as parameters two expressions, a position and two symbol tables. They then evaluate the two expressions and make sure that we are dealing with BoolVals, before carrying out the operation:
+
+\begin{verbatim}
+  | evalExp (And (e1, e2, pos), vtab, ftab) =
+        let val res1   = evalExp(e1, vtab, ftab)
+            val res2   = evalExp(e2, vtab, ftab)
+        in  case (res1, res2) of
+              (BoolVal n1, BoolVal n2) => if n1 then BoolVal (n1 = n2) 
+                                                else BoolVal false
+            | _ => invalidOperands "And on non-integral args: "
+                   [(Bool, Bool)] res1 res2 pos
+        end
+\end{verbatim}
+\clearpage
+\begin{verbatim}
+  | evalExp (Or (e1, e2, pos), vtab, ftab) =
+        let val res1   = evalExp(e1, vtab, ftab)
+            val res2   = evalExp(e2, vtab, ftab)
+        in  case (res1, res2) of
+              (BoolVal n1, BoolVal n2) => if not n1 then BoolVal (n1 <> n2) 
+                                                    else BoolVal true
+            | _ => invalidOperands "Or on non-integral args: " 
+                   [(Bool, Bool)] res1 res2 pos
+        end
+\end{verbatim}
+
 \subsubsection{TypeChecker.sml}
+These features have not yet been implemented.
+
 \subsubsection{CodeGen.sml}
+We implemented AND as well as OR evaluations by adding them to the "compileExp" function. It then evaluates each expression and invokes the following mips instructions:
+
+\textbf{AND}
+\begin{verbatim}
+          [ Mips.LI (place, "0")          (*Assume t1 and t2 is unequal*)
+          , Mips.BEQ (t1,"$0",falseLabel) (*Compare t1 to 0*)
+          , Mips.BNE (t1,t2,falseLabel)   (*Compare t1 to t2*)
+          , Mips.LI (place,"1")           (*If not false at this point, true*)
+          , Mips.LABEL falseLabel ]       (*false label*) 
+\end{verbatim}
+
+\textbf{OR}
+\begin{verbatim}
+          [ Mips.LI (place, "1")         (*Assume t1 and t2 is equal*)
+          , Mips.BNE (t1,"$0",trueLabel) (*Compare t1 to 0 for short-circuiting*)
+          , Mips.BNE (t1,t2,trueLabel)   (*Compare t1 to t2*)
+          , Mips.LI (place,"0")          (*If not true at this point, then false*)
+          , Mips.LABEL trueLabel ]       (*True label*)
+\end{verbatim}
+\clearpage
+\textbf{Full code:}
+\begin{verbatim}
+  | And (e1, e2, pos) =>
+      let val t1 = newName "and_L"
+          val t2 = newName "and_R"
+          val code1 = compileExp e1 vtable t1
+          val code2 = compileExp e2 vtable t2
+          val falseLabel = newName "false"
+      in  code1 @ code2 @
+          [ Mips.LI (place, "0")
+          , Mips.BEQ (t1,"$0",falseLabel)
+          , Mips.BNE (t1,t2,falseLabel)
+          , Mips.LI (place,"1") 
+          , Mips.LABEL falseLabel ]
+      end
+      
+  | Or (e1, e2, pos) =>
+      let val t1 = newName "or_L"
+          val t2 = newName "or_R"
+          val code1 = compileExp e1 vtable t1
+          val code2 = compileExp e2 vtable t2
+          val trueLabel = newName "true"
+      in  code1 @ code2 @
+          [ Mips.LI (place, "1")
+          , Mips.BNE (t1,"$0",trueLabel)
+          , Mips.BNE (t1,t2,trueLabel)
+          , Mips.LI (place,"0")
+          , Mips.LABEL trueLabel ]
+      end
+\end{verbatim}
+
+
 \subsection{Not and negation}
 \subsubsection{Lexer.lex}
+We added "not" as well as "negate" to the keyword function. We assume the implementation in the parser phase takes a single argument; its position which is a tuple of integers:
+\begin{verbatim}
+       | "not"          => Parser.NOT pos
+       | "negate"       => Parser.NEGATE pos
+\end{verbatim}
 \subsubsection{Parser.grm}
+We modified the token that handles if-then-else statements to also handle NOT as well as NEGATE
+\begin{verbatim}
+%token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND OR NOT NEGATE
+\end{verbatim}
 \subsubsection{Interpreter.sml}
+We added cases to the "evalExp" function to handle NOT (Not) as well as NEGATE (Negate). They take as parameters an expression, a position and two symbol tables. They then evaluate the expression and make sure that we are dealing with a BoolVal in \textbf{Not}, and an IntVal in \textbf{Negate}, before carrying out the operation:
+
+\begin{verbatim}
+  | evalExp ( Not(e, pos), vtab, ftab ) =
+        let val res = evalExp(e, vtab, ftab)
+        in case res of BoolVal n => BoolVal(if n = true then false else true)
+            | _ => invalidOperands "Not on non-boolean arg: " [(Bool, Bool)] res res pos
+Dr        end
+\end{verbatim}
+\clearpage
+\begin{verbatim}
+  | evalExp ( Negate(e, pos), vtab, ftab ) =
+        let val res = evalExp(e, vtab, ftab)
+        in case res of IntVal n => IntVal(0-n)
+            | _ => invalidOperands "Negate on non-integral arg: " [(Int, Int)] res res pos
+        end
+\end{verbatim}
 \subsubsection{TypeChecker.sml}
+These features have not yet been implemented.
 \subsubsection{CodeGen.sml}
+We implemented NOT as well as NEGATE evaluations by adding them to the "compileExp" function. It then evaluates each expression and invokes the following mips instructions:
 
+\textbf{NOT}
+\begin{verbatim}
+          [Mips.XORI (place,t, "1")]
+\end{verbatim}
+
+\textbf{OR}
+\begin{verbatim}
+          [Mips.SUB (place, "$0", t)]
+\end{verbatim}
+\clearpage
+\textbf{Full code:}
+\begin{verbatim}
+  | Not (e', pos) =>
+      let val t = newName "not_arg"
+          val code = compileExp e' vtable t
+      in code @ [Mips.XORI (place,t, "1")]
+      end
+  | Negate (e', pos) =>
+      let val t = newName "not_arg"
+          val code = compileExp e' vtable t
+      in code @ [Mips.SUB (place, "$0", t)]
+      end
+\end{verbatim}
 \section{Array combinators}
-
+Not yet implemented
 \end{document}
