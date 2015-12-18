@@ -512,10 +512,14 @@ fun compileExp e vtable place =
   | Map (FunName farg, arr_exp, elem_type, ret_type, pos) =>
     let val size_reg = newName "size_reg"
         val arr_reg  = newName "arr_reg"
-        val arr_code = compileExp arr_exp vtable arr_reg
+        val elem_reg = newName "elem_reg"
         val addr_reg = newName "addr_reg"
         val i_reg    = newName "i_reg"
         val tmp_reg  = newName "tmp_reg"
+        val loop_beg = newName "loop_beg"
+        val loop_end = newName "loop_end"
+        val arr_code = compileExp arr_exp vtable arr_reg
+
         val offset   = case getElemSize elem_type of
                                    One => "1"
                                  | Four => "4"
@@ -523,13 +527,13 @@ fun compileExp e vtable place =
 
         val init_regs = [ Mips.ADDI (addr_reg, place, offset)
                         , Mips.MOVE (i_reg, "0")
-                        , Mips.ADDI (tmp_reg, place, offset) ]
-        val loop_beg =    newName "loop_beg"
-        val loop_end =    newName "loop_end"
+                        , Mips.ADDI (elem_reg, arr_reg, offset) ]
         
         val loop_header = [ Mips.LABEL (loop_beg)
                           , Mips.SUB (tmp_reg, i_reg, size_reg)
                           , Mips.BGEZ (tmp_reg, loop_end) ]
+
+
 
         val load_val =    Mips.LW(tmp_reg, arr_reg, "0")
         val loop_map =    applyRegs(farg, [tmp_reg], tmp_reg, pos)
@@ -554,6 +558,20 @@ fun compileExp e vtable place =
   | Reduce (binop, acc_exp, arr_exp, tp, pos) =>
     raise Fail "Unimplemented feature reduce"
 
+(* Lambda helper function *)
+
+  and applyFunArg (FunName s, args, vtable, place, pos) : Mips.Prog =
+      let val tmp_reg = newName "tmp_reg"
+      in  applyRegs(s, args, tmp_reg, pos) @ [Mips.MOVE(place, tmp_reg)] end
+
+    | applyFunArg (Lambda (_, params, body, fpos), args, vtable, place, pos) =
+      let val tmp_reg = newName "tmp_reg"
+          fun bindArgToVtable (Param (pn, pt), arg, vtab) = SymTab.bind pn arg vtab
+          val vtab' = ListPair.foldr bindArgToVtable vtable (params, args)
+          val code = compileExp body vtab' tmp_reg
+      in
+         code @ [Mips.MOVE(place, tmp_reg)]
+      end
 
 (* compile condition *)
 and compileCond c vtable tlab flab =
