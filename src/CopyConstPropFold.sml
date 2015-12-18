@@ -31,12 +31,19 @@ fun copyConstPropFoldExp vtable e =
       | Let (Dec (name, e, decpos), body, pos) =>
         let val e' = copyConstPropFoldExp vtable e
         in case e' of
-               Var (varname, _) =>
-               raise Fail "Cannot copy-propagate Var yet"
-             | Constant (value, _) =>
-               raise Fail "Cannot copy-propagate Constant yet"
-             | Let (Dec bindee, inner_body, inner_pos) =>
-               raise Fail "Cannot copy-propagate Let yet"
+               Var (varname, _) => Var(varname, pos)
+             | Constant (value, _) => Constant(value, pos)
+             | Let (Dec bindee, inner_body, inner_pos) => 
+                let val bindee' = copyConstPropFoldExp vtable e 
+                in case bindee' of
+                    Var (varname, pos)   => copyConstPropFoldExp vtable bindee'
+                  | Constant(value, pos) => copyConstPropFoldExp vtable bindee'
+                  | Let(Dec bindee, inner_body, inner_pos) => copyConstPropFoldExp vtable bindee'
+                  | _                 => raise Fail("Wrong type")
+
+                end
+
+
              | _ => (* Fallthrough - for everything else, do nothing *)
                let val body' = copyConstPropFoldExp vtable body
                in Let (Dec (name, e', decpos), body', pos)
