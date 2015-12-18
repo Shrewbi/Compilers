@@ -38,20 +38,17 @@
        | "bool"         => Parser.BOOL pos
        | "char"         => Parser.CHAR pos
        | "fun"          => Parser.FUN pos
-       | "true"         => Parser.BOOLVAL (true, pos) (*added*)
+       | "true"         => Parser.BOOLVAL (true, pos)  (*added*)
        | "false"        => Parser.BOOLVAL (false, pos) (*added*)
-       | "*"            => Parser.MULT pos (*added*)
-       | "/"            => Parser.DIV pos (*added*)
-       | "and"          => Parser.AND pos (*added*)
-       | "or"           => Parser.OR pos (*added*)
-       | "not"          => Parser.NOT pos (*added*)
-       | "negate"       => Parser.NEGATE pos (*added*)
-       | "iota"         => Parser.IOTA pos (*added*)
-       | "map"          => Parser.MAP pos (*added*)
-       | "reduce"       => Parser.REDUCE pos (*added*)
+       | "and"          => Parser.AND pos              (*added*)
+       | "or"           => Parser.OR pos               (*added*)
+       | "not"          => Parser.NOT pos              (*added*)
 (* specials: *)
        | "read"         => Parser.READ pos
        | "write"        => Parser.WRITE pos
+       | "iota"         => Parser.IOTA pos (*added*)
+       | "map"          => Parser.MAP pos (*added*)
+       | "reduce"       => Parser.REDUCE pos (*added*)
        | _              => Parser.ID (s, pos)
 
  }
@@ -84,7 +81,12 @@ rule Token = parse
 			     getPos lexbuf) }
   | `+`                 { Parser.PLUS   (getPos lexbuf) }
   | `-`                 { Parser.MINUS  (getPos lexbuf) }
+  | `/`                 { Parser.DIV    (getPos lexbuf) }
+  | `*`                 { Parser.MULT   (getPos lexbuf) }
+  | "&&"                { Parser.AND    (getPos lexbuf) }
+  | "||"                { Parser.OR     (getPos lexbuf) }
   | "=="                { Parser.DEQ    (getPos lexbuf) }
+  | `~`                 { Parser.NEGATE (getPos lexbuf) }
   | `=`                 { Parser.EQ     (getPos lexbuf) }
   | `<`                 { Parser.LTH    (getPos lexbuf) }
   | `(`                 { Parser.LPAR   (getPos lexbuf) }
