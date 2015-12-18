@@ -509,30 +509,35 @@ fun compileExp e vtable place =
          @ loop_footer
       end
 
-  | Map (farg, arr_exp, elem_type, ret_type, pos) =>
+  | Map (FunName farg, arr_exp, elem_type, ret_type, pos) =>
     let val size_reg = newName "size_reg"
         val arr_reg  = newName "arr_reg"
-        val elem_reg = newName "elem_reg"
         val arr_code = compileExp arr_exp vtable arr_reg
         val addr_reg = newName "addr_reg"
-        val i_reg = newName "i_reg"
-
+        val i_reg    = newName "i_reg"
+        val tmp_reg  = newName "tmp_reg"
+        val offset   = case getElemSize elem_type of
+                                   One => "1"
+                                 | Four => "4"
         val get_size = [ Mips.LW (size_reg, arr_reg, "0")]
 
-        val init_regs = [ Mips.ADDI (addr_reg, place, "4")
-                        , Mips.MOVE (i_reg, "0") ]
-
+        val init_regs = [ Mips.ADDI (addr_reg, place, offset)
+                        , Mips.MOVE (i_reg, "0")
+                        , Mips.ADDI (tmp_reg, place, offset) ]
         val loop_beg =    newName "loop_beg"
         val loop_end =    newName "loop_end"
-        val tmp_reg  =    newName "tmp_reg"
+        
         val loop_header = [ Mips.LABEL (loop_beg)
                           , Mips.SUB (tmp_reg, i_reg, size_reg)
                           , Mips.BGEZ (tmp_reg, loop_end) ]
-        
-        val loop_map =    [  ]
 
-        val loop_footer = [ Mips.ADDI (addr_reg, addr_reg, "4")
+        val load_val =    Mips.LW(tmp_reg, arr_reg, "0")
+        val loop_map =    applyRegs(farg, [tmp_reg], tmp_reg, pos)
+        val save_val =    Mips.SW(tmp_reg, addr_reg, "0")
+
+        val loop_footer = [ Mips.ADDI (addr_reg, addr_reg, offset)
                           , Mips.ADDI (i_reg, i_reg, "1")
+                          , Mips.ADDI (tmp_reg, tmp_reg, offset)
                           , Mips.J (loop_beg)
                           , Mips.LABEL (loop_end)]
 
