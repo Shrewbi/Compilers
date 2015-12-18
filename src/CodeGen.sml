@@ -567,7 +567,7 @@ fun compileExp e vtable place =
     | applyFunArg (Lambda (_, params, body, fpos), args, vtable, place, pos) =
       let val tmp_reg = newName "tmp_reg"
           fun bindArgToVtable (Param (pn, pt), arg, vtab) = SymTab.bind pn arg vtab
-          val vtab' = ListPair.foldr bindArgToVtable vtable (params, args)
+          val vtab' = ListPair.foldr bindArgToVtable vtab (params, args)
           val code = compileExp body vtab' tmp_reg
       in
          code @ [Mips.MOVE(place, tmp_reg)]
