@@ -1,9 +1,9 @@
 local
 type t__1__ = (int*int)
 type t__2__ = (int*int)
-type t__3__ = (bool*(int*int))
-type t__4__ = (int*int)
-type t__5__ = char*(int*int)
+type t__3__ = (int*int)
+type t__4__ = char*(int*int)
+type t__5__ = (int*int)
 type t__6__ = (int*int)
 type t__7__ = (int*int)
 type t__8__ = (int*int)
@@ -37,19 +37,20 @@ type t__35__ = (int*int)
 type t__36__ = string*(int*int)
 type t__37__ = (int*int)
 type t__38__ = (int*int)
+type t__39__ = (int*int)
 in
 datatype token =
     AND of t__1__
   | BOOL of t__2__
-  | BOOLVAL of t__3__
-  | CHAR of t__4__
-  | CHARLIT of t__5__
-  | COMMA of t__6__
-  | DEQ of t__7__
-  | DIV of t__8__
-  | ELSE of t__9__
-  | EOF of t__10__
-  | EQ of t__11__
+  | CHAR of t__3__
+  | CHARLIT of t__4__
+  | COMMA of t__5__
+  | DEQ of t__6__
+  | DIV of t__7__
+  | ELSE of t__8__
+  | EOF of t__9__
+  | EQ of t__10__
+  | FALSE of t__11__
   | FUN of t__12__
   | ID of t__13__
   | IF of t__14__
@@ -76,7 +77,8 @@ datatype token =
   | RPAR of t__35__
   | STRINGLIT of t__36__
   | THEN of t__37__
-  | WRITE of t__38__
+  | TRUE of t__38__
+  | WRITE of t__39__
 end;
 
 val Prog :

@@ -39,8 +39,8 @@ local open Obj Lexing in
        | "bool"         => Parser.BOOL pos
        | "char"         => Parser.CHAR pos
        | "fun"          => Parser.FUN pos
-       | "true"         => Parser.BOOLVAL (true, pos)  (*added*)
-       | "false"        => Parser.BOOLVAL (false, pos) (*added*)
+       | "true"         => Parser.TRUE pos  (*added*)
+       | "false"        => Parser.FALSE pos (*added*)
        | "and"          => Parser.AND pos              (*added*)
        | "or"           => Parser.OR pos               (*added*)
        | "not"          => Parser.NOT pos              (*added*)
