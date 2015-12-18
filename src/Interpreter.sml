@@ -276,7 +276,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
                let val mlst = map (fn x => evalFunArg (farg, vtab, ftab, pos, [x])) lst
                in  ArrayVal (mlst, farg_ret_type)
                end
-             | _ => raise Error("Map: Wrong argument: "^ppVal 0 arr, pos)
+             | _ => raise Error("Map: Wrong argument: " ^ppVal 0 arr, pos)
         end
 
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
