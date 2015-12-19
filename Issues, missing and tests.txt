@@ -1,5 +1,8 @@
-- Can't take some functions, such as incr in reduce and write_int in lambda.fo, but can take functions as the one in negate.fo
+Issues:
+	- Can't take some functions, such as incr in reduce and write_int in lambda.fo, but can take functions as the one in negate.fo
 
+Missing:
+	- Binop
 
 Given tests:
 	fib.fo 				Works
