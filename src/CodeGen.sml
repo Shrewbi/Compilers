@@ -560,13 +560,11 @@ fun compileExp e vtable place =
   | Reduce (binop, acc_exp, arr_exp, tp, pos) =>
     let val size_reg = newName "size_reg"
         val arr_reg  = newName "arr_reg"
-        val elem_reg = newName "elem_reg"
         val addr_reg = newName "addr_reg"
         val i_reg    = newName "i_reg"
         val tmp_reg  = newName "tmp_reg"
         val loop_beg = newName "loop_beg"
         val loop_end = newName "loop_end"
-        val res_reg  = newName "res_reg"
         val arr_code = compileExp arr_exp vtable arr_reg
         val acc_code = compileExp acc_exp vtable arr_reg
 
