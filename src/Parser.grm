@@ -23,7 +23,7 @@ open Fasto.UnknownTypes
 %left  DEQ LTH
 %left  PLUS MINUS
 %left  MULT DIV
-%right NEGATE NOT
+%nonassoc NEGATE NOT
 
 
 %start Prog
@@ -35,6 +35,7 @@ open Fasto.UnknownTypes
 %type <Fasto.UnknownTypes.Exp> Exp
 %type <Fasto.UnknownTypes.Exp list> Exps
 %type <Fasto.UnknownTypes.FunArg> FunArg
+%type <Fasto.UnknownTypes.FunArg> BinOp
 
 %%
 
@@ -74,8 +75,8 @@ Exp :     NUM              { Constant (IntVal (#1 $1), #2 $1) }
         | Exp DIV     Exp  { Divide ($1, $3, $2) }
         | Exp AND     Exp  { And    ($1, $3, $2) }
         | Exp OR      Exp  { Or     ($1, $3, $2) }
-        | Exp NOT     Exp  { Not    ($1, $2)     }
-        | Exp NEGATE  Exp  { Negate ($1, $2)     }
+        | NOT         Exp  { Not    ($2, $1)     }
+        | NEGATE      Exp  { Negate ($2, $1)     }
         | TRUE             { Constant(BoolVal(true), $1)  }
         | FALSE            { Constant(BoolVal(false), $1) }
         | Exp DEQ     Exp  { Equal  ($1, $3, $2) }
@@ -105,6 +106,7 @@ Exp :     NUM              { Constant (IntVal (#1 $1), #2 $1) }
 
         | REDUCE LPAR FunArg COMMA Exp COMMA Exp RPAR
                         { Reduce ($3, $5, $7, (), $1)}
+
 ;
 
 Exps : Exp COMMA Exps   { $1 :: $3 }

@@ -1,6 +1,6 @@
 fun int write_int(int x) = write(x)
 
-fun [int] write_int_arr([int] x) = map(write_int, x)
+fun [int] write_int_arr([int] x) = map(write_int(2), x)
 
 fun int main() =
   let N = read(int) in
