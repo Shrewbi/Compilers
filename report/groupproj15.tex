@@ -113,7 +113,6 @@ We implemented multiplication and division by adding them as cases to the "compi
       in  code1 @ code2 @ [Mips.DIV (place,t1,t2)]
       end
 \end{verbatim}
-\subsubsection{Tests}
 
 \subsection{AND and OR}
 \subsubsection{Lexer.lex}
@@ -216,7 +215,6 @@ For the "OR" case, we first create a "trueLabel" which marks a true evaluation. 
       end
 
 \end{verbatim}
-\subsubsection{Tests}
 
 \subsection{Not and negation}
 \subsubsection{Lexer.lex}
@@ -284,7 +282,6 @@ For the "NEGATE" case we use the Mips instruction "SUB" to subtract the integer 
       in code @ [Mips.SUB (place, "$0", t)]
       end
 \end{verbatim}
-\subsubsection{Tests}
 
 \subsection{MAP and REDUCE}
 \subsubsection{Lexer.lex}
@@ -479,10 +476,53 @@ and applyFunArg (FunName s, args, vtable, place, pos) : Mips.Prog =
          code @ [Mips.MOVE(place, tmp_reg)]
       end
 \end{verbatim}
-\subsubsection{Tests}
 \subsection{Binary operators}
 Unfortunately we did not get around to this, and all we managed to do was implement the unknown BinOp in the parser.
-\section{Task 3}
+\clearpage
+\section{Tests}
+\textbf{Provided tests}
+\begin{table}[ht]
+\centering
+\label{my-label}
+\begin{tabular}{|c|l|l|l|}
+\hline
+# & \textbf{Name}  & \textbf{Expected result}  & \textbf{Actual result} \\ \hline
+1 & fib.fo             & Fib 10 = 55  &  Expected result \\ \hline
+2 & iota.fo            & Produce list from 0 - 6  & Expected result  \\ \hline
+3 & inline\_map.fo     & Write int array  & Parse error: L 9, C 40. Map not recognized \\ \hline
+4 & io\_mssp.fo        & Write int from array[0]  & Parse error: L 11, C 7. Map not recognized  \\ \hline
+5 & lambda.fo          & Write int  & Parse error: L 3, C 40. Map not recognized \\ \hline
+6 & map\_red\_io.fo    & Write char array  & Parse error: L 11, C 15. Map not recognized  \\ \hline
+   &                   & x_0 =3/2 == \ \ 1  : true   &  \\ 
+   &                   & x_1 =~3/2 == ~2: true & \\ 
+   &                   & x_1 =3/~2 == ~2: true & \\ 
+7  & negate.fo         & x_1 =~3/~2 == 2: true & Expected result \\ \hline
+8 & neg\_simple.fo     & Error  & Expected result  \\ \hline
+9 & ordchr.fo          & Write char array  & Parse error: L 3, C 37. Map not recognized  \\ \hline
+10 & proj\_figure3.fo  & Write char array  & Parse error: L 7, C 15. Map not recognized  \\ \hline
+11 & reduce.fo         & write int  &  Parse error: L 4, C 18. Reduce not recognized \\ \hline
+12 & short\_circuit.fo & Short-circuit  &  Does not short-circuit and runs out of memory \\ \hline
+\end{tabular}
+\end{table}
 
+
+\textbf{Additional tests}
+\begin{table}[ht]
+\centering
+\label{my-label2}
+\begin{tabular}{|c|l|l|l|}
+\hline
+# & \textbf{Name}  & \textbf{Expected result}  & \textbf{Actual result} \\ \hline
+  &  & n and n & \\
+  &  & n = 1: true & \\
+1 & and.fo  & n = 0: false & Expected result \\ \hline
+  &  &  n or n & \\
+  &  & n = 1: true & \\
+2 & or.fo  & n = 0: false & Expected result \\ \hline
+  &         & n = 6/2: 3 & \\
+3 & div.fo  & n = 5/2: 2 & Expected result \\ \hline
+4 & mult.fo & n = 3*2: 6 & Expected result \\ \hline
+\end{tabular}
+\end{table}
 
 \end{document}
