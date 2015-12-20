@@ -6,13 +6,12 @@
 \usepackage{mdwlist}
 \usepackage{graphicx}
 
-\title{Oversættere Group milestone}
+\title{Oversættere Group Assignment}
 \author{Martin Thiele, Alexander Mathiesen, Daniel Eyþórsson}
 \date{\parbox{\linewidth}{\centering%
-  15. december 2015\endgraf\bigskip
+  20. december 2015\endgraf\bigskip
   Studienummer: mqn507, pkq530, kzs773\endgraf\medskip
-  Email: <Studienummer> @alumni.ku.dk\\
-  Oversættere \endgraf}}
+  Email: <Studienummer> @alumni.ku.dk\endgraf}}
 
 \begin{document}
 \maketitle
@@ -23,16 +22,24 @@ We have decided to divide this report into three parts, one for each task. Each 
 For the first task of the assignment we were asked to implement multiplication, division, boolean operators and literals. We have modified the following files: Lexer.lex, Parser.grm, Interpreter.sml, TypeChecker.sml and CodeGen.sml.
 \subsection{Boolean literals}
 \subsubsection{Lexer.lex}
-We added "true" and "false" cases to the keyword function. We assume the implementation of boolean values in the parser phase to handle both "true" and "false" and take these as extra an extra parameter alongside the position:
+
+We added "true" and "false" by adding the tokens known as TRUE and FALSE. These both take a position as their only argument.
 \begin{verbatim}
-    | "true"    => Parser.BOOLVAL(true, pos)
-    | "false"   => Parser.BOOLVAL(false, pos)
+    | "true"    => Parser.TRUE pos
+    | "false"   => Parser.FALSE pos
 \end{verbatim}
 \subsubsection{Parser.grm}
 We added a token "BOOLVAL" to the list and defined it to take two arguments; a boolean value and a position, which is a tuple of integers:
 \begin{verbatim}
-%token <(bool*(int*int))> BOOLVAL
+%token <(int*int)> TRUE FALSE
 \end{verbatim}
+
+We now need to add these to their expression cases. Since they are booleans and constants, they don't take any expressions, and results to the following:
+\begin{verbatim}
+        | TRUE             { Constant(BoolVal(true), $1)  }
+        | FALSE            { Constant(BoolVal(false), $1) }
+\end{verbatim}
+
 \subsubsection{Interpreter.sml}
 No modifications were needed in this file. 
 \subsubsection{TypeChecker.sml}
@@ -112,15 +119,25 @@ We implemented multiplication and division by adding them as cases to the "compi
 \clearpage
 \subsection{AND and OR}
 \subsubsection{Lexer.lex}
-We added "and" as well as "or" to the keyword function. We assume the implementation in the parser phase takes a single argument; its position which is a tuple of integers:
+We added "and" as well as "or" as symbols instead of text as "and" as well as "or" usually is being used with a different meaning when writing SML.
 \begin{verbatim}
-       | "and"          => Parser.AND pos
-       | "or"           => Parser.OR pos
+  | "&&"                { Parser.AND    (getPos lexbuf) }
+  | "||"                { Parser.OR     (getPos lexbuf) }
 \end{verbatim}
 \subsubsection{Parser.grm}
 We modified the token that handles if-then-else statements to also handle AND as well as OR
 \begin{verbatim}
-%token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND OR
+%token <(int*int)> AND OR
+\end{verbatim}
+We followed the plus and minus case and determined that we needed to implement associatives for the tokens.
+thus:
+\begin{verbatim}
+%left  OR AND
+\end{verbatim}
+In order for the two expressions to work, they need to be implemented as expressions later on in the parser. We have done this by doing the following:
+\begin{verbatim}
+        | Exp AND     Exp  { And    ($1, $3, $2) }
+        | Exp OR      Exp  { Or     ($1, $3, $2) }
 \end{verbatim}
 
 \subsubsection{Interpreter.sml}
@@ -151,8 +168,28 @@ We added cases to the "evalExp" function to handle AND (And) as well as OR (Or).
 \end{verbatim}
 
 \subsubsection{TypeChecker.sml}
-These features have not yet been implemented.
+In the typechecker we check if e1 is a boolean, this is done to short-circuit. If e1 is a boolean, then e2 is checked in the case of being another boolean. If it is then we continue on, else we raise an error
 
+
+\begin{verbatim}
+    | In.And (e1, e2, pos)
+      => let val (t1, e1_dec) = checkExp ftab vtab e1
+          in if t1 = Bool
+            then let val (t2, e2_dec) = checkExp ftab vtab e2
+             in if t2 = Bool then (Bool, Out.And(e1_dec, e2_dec, pos))
+                else raise Error (("Wrong type: " ^ ppType t2), pos) end
+            else raise Error (("Wrong type: " ^ ppType t1), pos)
+          end
+
+    | In.Or (e1, e2, pos)
+      => let val (t1, e1_dec) = checkExp ftab vtab e1
+          in if t1 = Bool
+            then let val (t2, e2_dec) = checkExp ftab vtab e2
+              in if t2 = Bool then (Bool, Out.Or(e1_dec, e2_dec, pos))
+              else raise Error (("Wrong type: " ^ ppType t2), pos) end
+          else raise Error (("Wrong type: " ^ ppType t1), pos)
+          end
+\end{verbatim}
 \subsubsection{CodeGen.sml}
 We implemented AND as well as OR evaluations by adding them to the "compileExp" function. It then evaluates each expression and invokes the following mips instructions:
 
@@ -203,21 +240,28 @@ We implemented AND as well as OR evaluations by adding them to the "compileExp" 
           , Mips.LI (place,"0")
           , Mips.LABEL trueLabel ]
       end
+
 \end{verbatim}
-
-
 \subsection{Not and negation}
 \subsubsection{Lexer.lex}
-We added "not" as well as "negate" to the keyword function. We assume the implementation in the parser phase takes a single argument; its position which is a tuple of integers:
-\begin{verbatim}
-       | "not"          => Parser.NOT pos
-       | "negate"       => Parser.NEGATE pos
-\end{verbatim}
+We added not and negate to our lexer file by using the symbols "!" and "$\sim$" respectively. There was no mention of this in the assignment, so we felt this would be most logical, seeing how these are already the recognized as their respective symbols in a lot of programming languages.
 \subsubsection{Parser.grm}
 We modified the token that handles if-then-else statements to also handle NOT as well as NEGATE
 \begin{verbatim}
-%token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND OR NOT NEGATE
+%token <(int*int)> NOT NEGATE
 \end{verbatim}
+
+By using the same logic for plus and minus we had to add a precedence to our NOT and NEGATE cases. These are done as so
+\begin{verbatim}
+%nonassoc NEGATE NOT
+\end{verbatim}
+And just as well, we need to add them in their expression cases as well. These only take one expression which differs from the previous ones
+\begin{verbatim}
+        | NOT         Exp  { Not    ($2, $1)     }
+        | NEGATE      Exp  { Negate ($2, $1)     }
+\end{verbatim}
+
+
 \subsubsection{Interpreter.sml}
 We added cases to the "evalExp" function to handle NOT (Not) as well as NEGATE (Negate). They take as parameters an expression, a position and two symbol tables. They then evaluate the expression and make sure that we are dealing with a BoolVal in \textbf{Not}, and an IntVal in \textbf{Negate}, before carrying out the operation:
 
@@ -228,7 +272,6 @@ We added cases to the "evalExp" function to handle NOT (Not) as well as NEGATE (
             | _ => invalidOperands "Not on non-boolean arg: " [(Bool, Bool)] res res pos
 Dr        end
 \end{verbatim}
-\clearpage
 \begin{verbatim}
   | evalExp ( Negate(e, pos), vtab, ftab ) =
         let val res = evalExp(e, vtab, ftab)
@@ -237,7 +280,20 @@ Dr        end
         end
 \end{verbatim}
 \subsubsection{TypeChecker.sml}
-These features have not yet been implemented.
+For the first case, not, we check if the expression is a boolean, if it is carry on, else raise error. In the second case of negate, we check if the expression is an integer, if it is we carry on.
+\begin{verbatim}
+    | In.Not (e, pos)
+      => let val (t, e_dec) = checkExp ftab vtab e
+          in if t = Bool then (Bool, Out.Not(e_dec, pos))
+          else raise Error (("Wrong type: " ^ ppType t), pos) 
+          end
+
+    | In.Negate (e, pos)
+      => let val (t, e_dec) = checkExp ftab vtab e
+          in if t = Int then (Int, Out.Negate(e_dec, pos))
+          else raise Error (("Wrong type: " ^ ppType t), pos) 
+          end
+\end{verbatim}
 \subsubsection{CodeGen.sml}
 We implemented NOT as well as NEGATE evaluations by adding them to the "compileExp" function. It then evaluates each expression and invokes the following mips instructions:
 

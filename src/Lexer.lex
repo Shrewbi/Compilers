@@ -38,11 +38,8 @@
        | "bool"         => Parser.BOOL pos
        | "char"         => Parser.CHAR pos
        | "fun"          => Parser.FUN pos
-       | "true"         => Parser.TRUE pos  (*added*)
-       | "false"        => Parser.FALSE pos (*added*)
-       | "and"          => Parser.AND pos              (*added*)
-       | "or"           => Parser.OR pos               (*added*)
-       | "not"          => Parser.NOT pos              (*added*)
+       | "true"         => Parser.TRUE pos             (*added*)
+       | "false"        => Parser.FALSE pos            (*added*)
 (* specials: *)
        | "read"         => Parser.READ pos
        | "write"        => Parser.WRITE pos
@@ -81,11 +78,12 @@ rule Token = parse
 			     getPos lexbuf) }
   | `+`                 { Parser.PLUS   (getPos lexbuf) }
   | `-`                 { Parser.MINUS  (getPos lexbuf) }
-  | `/`                 { Parser.DIV    (getPos lexbuf) }
   | `*`                 { Parser.MULT   (getPos lexbuf) }
+  | `/`                 { Parser.DIV    (getPos lexbuf) }
   | "&&"                { Parser.AND    (getPos lexbuf) }
   | "||"                { Parser.OR     (getPos lexbuf) }
   | "=="                { Parser.DEQ    (getPos lexbuf) }
+  | `!`                 { Parser.NOT    (getPos lexbuf) }
   | `~`                 { Parser.NEGATE (getPos lexbuf) }
   | `=`                 { Parser.EQ     (getPos lexbuf) }
   | `<`                 { Parser.LTH    (getPos lexbuf) }

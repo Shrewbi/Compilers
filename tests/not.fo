@@ -1,2 +1,2 @@
 fun bool main() =   let n = false in
-write(not n)
+write(!n)

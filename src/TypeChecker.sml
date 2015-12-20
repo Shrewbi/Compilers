@@ -102,7 +102,6 @@ and checkExp ftab vtab (exp : In.Exp)
          in (Int,
              Out.Minus (e1_dec, e2_dec, pos))
          end
-
     | In.Times (e1, e2, pos)
       => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
          in (Int,
@@ -140,7 +139,7 @@ and checkExp ftab vtab (exp : In.Exp)
 
     | In.Negate (e, pos)
       => let val (t, e_dec) = checkExp ftab vtab e
-          in if t = Bool then (Bool, Out.Negate(e_dec, pos))
+          in if t = Int then (Int, Out.Negate(e_dec, pos))
           else raise Error (("Wrong type: " ^ ppType t), pos) 
           end
     (* The types for e1, e2 must be the same. The result is always a Bool. *)
