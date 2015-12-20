@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.9.4)  20 DEC 2015 11:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.9.4)  20 DEC 2015 12:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -416,138 +416,244 @@ pos, Int, e1, e2)[]
  []
 
 [4]
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 156--156
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 158--158
 []              \T1/cmtt/m/n/12 (BoolVal n1, BoolVal n2) => if n1 then BoolVal 
 (n1 = n2)[] 
  []
 
 
-Overfull \hbox (17.4505pt too wide) in paragraph at lines 156--156
+Overfull \hbox (17.4505pt too wide) in paragraph at lines 158--158
 []                                                \T1/cmtt/m/n/12 else BoolVal 
 false[] 
  []
 
-[5
-
-]
-Overfull \hbox (73.01193pt too wide) in paragraph at lines 168--168
+[5]
+Overfull \hbox (73.01193pt too wide) in paragraph at lines 170--170
 []              \T1/cmtt/m/n/12 (BoolVal n1, BoolVal n2) => if not n1 then Bool
 Val (n1 <> n2)[] 
  []
 
 
-Overfull \hbox (35.97098pt too wide) in paragraph at lines 168--168
+Overfull \hbox (35.97098pt too wide) in paragraph at lines 170--170
 []                                                    \T1/cmtt/m/n/12 else Bool
 Val true[] 
  []
 
 
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 192--192
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 194--194
 []             \T1/cmtt/m/n/12 in if t2 = Bool then (Bool, Out.And(e1_dec, e2_d
 ec, pos))[] 
  []
 
 
-Overfull \hbox (54.49146pt too wide) in paragraph at lines 192--192
+Overfull \hbox (54.49146pt too wide) in paragraph at lines 194--194
 []                \T1/cmtt/m/n/12 else raise Error (("Wrong type: " ^ ppType t2
 ), pos) end[] 
  []
 
 
-Overfull \hbox (5.10352pt too wide) in paragraph at lines 192--192
+Overfull \hbox (5.10352pt too wide) in paragraph at lines 194--194
 []            \T1/cmtt/m/n/12 else raise Error (("Wrong type: " ^ ppType t1), p
 os)[] 
  []
 
 
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 192--192
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 194--194
 []              \T1/cmtt/m/n/12 in if t2 = Bool then (Bool, Out.Or(e1_dec, e2_d
 ec, pos))[] 
  []
 
 
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 192--192
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 194--194
 []              \T1/cmtt/m/n/12 else raise Error (("Wrong type: " ^ ppType t2),
  pos) end[] 
  []
 
 [6
 
-]
-Overfull \hbox (60.66495pt too wide) in paragraph at lines 203--203
-[]          \T1/cmtt/m/n/12 [ Mips.LI (place, "0")          (*Assume t1 and t2 
-is unequal*)[] 
- []
-
-
-Overfull \hbox (91.53241pt too wide) in paragraph at lines 203--203
-[]          \T1/cmtt/m/n/12 , Mips.LI (place,"1")           (*If not false at t
-his point, true*)[] 
- []
-
-
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 212--212
-[]          \T1/cmtt/m/n/12 [ Mips.LI (place, "1")         (*Assume t1 and t2 i
-s equal*)[] 
- []
-
-
-Overfull \hbox (110.05289pt too wide) in paragraph at lines 212--212
-[]          \T1/cmtt/m/n/12 , Mips.BNE (t1,"$0",trueLabel) (*Compare t1 to 0 fo
-r short-circuiting*)[] 
- []
-
-
-Overfull \hbox (116.22638pt too wide) in paragraph at lines 212--212
-[]          \T1/cmtt/m/n/12 , Mips.LI (place,"0")          (*If not true at thi
-s point, then false*)[] 
- []
-
-[7] [8
-
-]
-Overfull \hbox (85.35892pt too wide) in paragraph at lines 274--274
+] [7]
+Overfull \hbox (85.35892pt too wide) in paragraph at lines 257--257
 []        \T1/cmtt/m/n/12 in case res of BoolVal n => BoolVal(if n = true then 
 false else true)[] 
  []
 
 
-Overfull \hbox (153.26733pt too wide) in paragraph at lines 274--274
+Overfull \hbox (153.26733pt too wide) in paragraph at lines 257--257
 []            \T1/cmtt/m/n/12 | _ => invalidOperands "Not on non-boolean arg: "
  [(Bool, Bool)] res res pos[] 
  []
 
-
-Overfull \hbox (165.61432pt too wide) in paragraph at lines 281--281
+[8]
+Overfull \hbox (165.61432pt too wide) in paragraph at lines 264--264
 []            \T1/cmtt/m/n/12 | _ => invalidOperands "Negate on non-integral ar
 g: " [(Int, Int)] res res pos[] 
  []
 
-[9] [10] [11
+[9] [10
 
-] (/home/brintos/OV/report/groupproj15.aux) ) 
+]
+Overfull \hbox (147.09384pt too wide) in paragraph at lines 353--353
+[]               \T1/cmtt/m/n/12 let val mlst = map (fn x => evalFunArg (farg, 
+vtab, ftab, pos, [x])) lst[] 
+ []
+
+
+Overfull \hbox (66.83844pt too wide) in paragraph at lines 353--353
+[]             \T1/cmtt/m/n/12 | _ => raise Error("Map: Wrong argument: " ^ppVa
+l 0 arr, pos)[] 
+ []
+
+
+Overfull \hbox (5.10352pt too wide) in paragraph at lines 353--353
+[]  \T1/cmtt/m/n/12 | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab 
+) =[] 
+ []
+
+
+Overfull \hbox (116.22638pt too wide) in paragraph at lines 353--353
+[]               \T1/cmtt/m/n/12 foldl (fn (x,y) => evalFunArg (farg, vtab, fta
+b, pos, [x,y])) e lst[] 
+ []
+
+
+Overfull \hbox (85.35892pt too wide) in paragraph at lines 353--353
+[]             \T1/cmtt/m/n/12 | _ => raise Error("Reduce: Wrong argument: " ^p
+pVal 0 arr, pos)[] 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.355 ...the same as the function argument (and n_
+                                                  exp has the same type as t...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.356 \begin{verbatim}
+                      
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing \endgroup inserted.
+<inserted text> 
+                \endgroup 
+l.356 \begin{verbatim}
+                      
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+
+Overfull \hbox (183.14186pt too wide) in paragraph at lines 355--356
+\T1/cmr/m/n/12 func-tion ar-gu-ment (and n$[]\OML/cmm/m/it/12 xphasthesametypea
+sthef[]rginthereducecase\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 :Iftheyarewecancontin
+uetothecodegen:$ 
+ []
+
+
+Overfull \hbox (23.624pt too wide) in paragraph at lines 385--385
+[]      \T1/cmtt/m/n/12 => let val (a_type, arr_exp_dec) = checkExp ftab vtab a
+rr_exp[] 
+ []
+
+
+Overfull \hbox (196.48178pt too wide) in paragraph at lines 385--385
+[]                          \T1/cmtt/m/n/12 |  _ => raise Error("Map: wrong arg
+ument type " ^ ppType a_type, pos)[] 
+ []
+
+
+Overfull \hbox (208.82877pt too wide) in paragraph at lines 385--385
+[]               \T1/cmtt/m/n/12 | (_,  ret, args) => raise Error("Map: wrong a
+rgument type " ^ ppType e_type, pos)[] 
+ []
+
+[11]
+Overfull \hbox (91.53241pt too wide) in paragraph at lines 385--385
+[]             \T1/cmtt/m/n/12 then (Array f_ret, Out.Map (f', arr_exp_dec, e_t
+ype, f_ret, pos))[] 
+ []
+
+
+Overfull \hbox (122.39987pt too wide) in paragraph at lines 385--385
+[]             \T1/cmtt/m/n/12 else raise Error ("Map: incompatible arguments "
+ ^ ppType e_type, pos)[] 
+ []
+
+
+Overfull \hbox (23.624pt too wide) in paragraph at lines 385--385
+[]      \T1/cmtt/m/n/12 => let val (a_type, arr_exp_dec) = checkExp ftab vtab a
+rr_exp[] 
+ []
+
+
+Overfull \hbox (215.00226pt too wide) in paragraph at lines 385--385
+[]                          \T1/cmtt/m/n/12 |  _ => raise Error("Reduce: wrong 
+argument type " ^ ppType a_type, pos)[] 
+ []
+
+
+Overfull \hbox (227.34924pt too wide) in paragraph at lines 385--385
+[]               \T1/cmtt/m/n/12 | (_,  ret, args) => raise Error("Reduce: wron
+g argument type " ^ ppType e_type, pos)[] 
+ []
+
+
+Overfull \hbox (103.8794pt too wide) in paragraph at lines 385--385
+[]             \T1/cmtt/m/n/12 then (e_type, Out.Reduce (f', n_exp_dec, arr_exp
+_dec, e_type, pos))[] 
+ []
+
+
+Overfull \hbox (140.92035pt too wide) in paragraph at lines 385--385
+[]             \T1/cmtt/m/n/12 else raise Error ("Reduce: incompatible argument
+s " ^ ppType e_type, pos)[] 
+ []
+
+
+! LaTeX Error: \begin{document} ended by \end{verbatim}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.385 \end{verbatim}
+                    
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+! Extra \endgroup.
+<recently read> \endgroup 
+                          
+l.385 \end{verbatim}
+                    
+Things are pretty mixed up, but I think the worst is over.
+
+
+Overfull \hbox (326.12512pt too wide) in paragraph at lines 392--392
+[]\T1/cmtt/m/n/12 Unfortunately we did not get around to this, and all we manag
+ed to do was implement the unknown BinOp in the parser.[] 
+ []
+
+)
+! Emergency stop.
+<*> groupproj15.tex
+                   
+*** (job aborted, no legal \end found)
+
+ 
 Here is how much of TeX's memory you used:
- 2238 strings out of 493105
- 30721 string characters out of 6137073
- 92468 words of memory out of 5000000
- 5677 multiletter control sequences out of 15000+600000
+ 2235 strings out of 493105
+ 30637 string characters out of 6137073
+ 93468 words of memory out of 5000000
+ 5676 multiletter control sequences out of 15000+600000
  13002 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,6n,23p,363b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/
-cm-super/cm-super-t1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/s
-hare/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/typ
-e1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
-frm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1440.pfb></usr/sh
-are/texmf/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texmf/fonts/type
-1/public/cm-super/sftt1200.pfb>
-Output written on /home/brintos/OV/report/groupproj15.pdf (11 pages, 165177 byt
-es).
-PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
- 54 compressed objects within 1 object stream
- 0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
-
+ 37i,6n,23p,699b,252s stack positions out of 5000i,500n,10000p,200000b,80000s
+!  ==> Fatal error occurred, no output PDF file produced!

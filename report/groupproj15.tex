@@ -116,7 +116,9 @@ We implemented multiplication and division by adding them as cases to the "compi
       in  code1 @ code2 @ [Mips.DIV (place,t1,t2)]
       end
 \end{verbatim}
-\clearpage
+\subsubsection{Tests}
+
+
 \subsection{AND and OR}
 \subsubsection{Lexer.lex}
 We added "and" as well as "or" as symbols instead of text as "and" as well as "or" usually is being used with a different meaning when writing SML.
@@ -191,27 +193,7 @@ In the typechecker we check if e1 is a boolean, this is done to short-circuit. I
           end
 \end{verbatim}
 \subsubsection{CodeGen.sml}
-We implemented AND as well as OR evaluations by adding them to the "compileExp" function. It then evaluates each expression and invokes the following mips instructions:
-
-\textbf{AND}
-\begin{verbatim}
-          [ Mips.LI (place, "0")          (*Assume t1 and t2 is unequal*)
-          , Mips.BEQ (t1,"$0",falseLabel) (*Compare t1 to 0*)
-          , Mips.BNE (t1,t2,falseLabel)   (*Compare t1 to t2*)
-          , Mips.LI (place,"1")           (*If not false at this point, true*)
-          , Mips.LABEL falseLabel ]       (*false label*) 
-\end{verbatim}
-
-\textbf{OR}
-\begin{verbatim}
-          [ Mips.LI (place, "1")         (*Assume t1 and t2 is equal*)
-          , Mips.BNE (t1,"$0",trueLabel) (*Compare t1 to 0 for short-circuiting*)
-          , Mips.BNE (t1,t2,trueLabel)   (*Compare t1 to t2*)
-          , Mips.LI (place,"0")          (*If not true at this point, then false*)
-          , Mips.LABEL trueLabel ]       (*True label*)
-\end{verbatim}
-\clearpage
-\textbf{Full code:}
+We implemented AND as well as OR evaluations by adding them to the "compileExp" function. For the "AND" case, we first create a "falseLabel" which marks a false evaluation. We then load the value 0 as we assume the expression returns false. We then use the "BEQ" instruction in Mips to see if \(t1 = 0\) (using the \(\$0\) register in Mips), in which case we know to the "AND" expression can only return false, and we jump to the "falseLabel". This is to maintain a short circuit structure. We then use the "BNE" instruction to see if \(t1\neq t2\). Since we know at this point that \(t1\) is true, if this returns true, then \(t2\) must be false, and we jump to the "falseLabel". 
 \begin{verbatim}
   | And (e1, e2, pos) =>
       let val t1 = newName "and_L"
@@ -242,6 +224,7 @@ We implemented AND as well as OR evaluations by adding them to the "compileExp" 
       end
 
 \end{verbatim}
+\subsubsection{Tests}
 \subsection{Not and negation}
 \subsubsection{Lexer.lex}
 We added not and negate to our lexer file by using the symbols "!" and "$\sim$" respectively. There was no mention of this in the assignment, so we felt this would be most logical, seeing how these are already the recognized as their respective symbols in a lot of programming languages.
@@ -320,6 +303,94 @@ We implemented NOT as well as NEGATE evaluations by adding them to the "compileE
       in code @ [Mips.SUB (place, "$0", t)]
       end
 \end{verbatim}
-\section{Array combinators}
-Not yet implemented
+\subsubsection{Tests}
+\subsection{MAP and REDUCE}
+\subsubsection{Lexer.lex}
+In the lexer we added the required tokens for both map and reduce to work
+\begin{verbatim}
+       | "map"          => Parser.MAP pos
+       | "reduce"       => Parser.REDUCE pos
+\end{verbatim}
+\subsubsection{Parser.grm}
+In the parser, we initialize by reading the tokens from the lexer, it takes a position and is done by doing the following:
+\begin{verbatim}
+%token <(int*int)> MAP REDUCE
+\end{verbatim}
+
+Then, the expression cases are written with the correct registers and paranthesis as well as commas. This is done like so:
+\begin{verbatim}
+        | MAP LPAR FunArg COMMA Exp RPAR
+                        { Map ($3, $5, (), (),  $1) }
+
+        | REDUCE LPAR FunArg COMMA Exp COMMA Exp RPAR
+                        { Reduce ($3, $5, $7, (), $1)}
+\end{verbatim}
+
+\subsubsection{Interpreter.sml}
+Next, we implement map and reduce in our interpreter
+
+\begin{verbatim}
+  | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) =
+        let val arr  = evalExp(arrexp, vtab, ftab)
+            val farg_ret_type = rtpFunArg (farg, ftab, pos)
+        in case arr of
+               ArrayVal (lst,tp1) =>
+               let val mlst = map (fn x => evalFunArg (farg, vtab, ftab, pos, [x])) lst
+               in  ArrayVal (mlst, farg_ret_type)
+               end
+             | _ => raise Error("Map: Wrong argument: " ^ppVal 0 arr, pos)
+        end
+
+  | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
+            let val arr  = evalExp(arrexp, vtab, ftab)
+                val e  = evalExp(ne, vtab, ftab)
+                val farg_ret_type = rtpFunArg (farg, ftab, pos)
+        in case arr of
+               ArrayVal (lst,tp1) =>
+               foldl (fn (x,y) => evalFunArg (farg, vtab, ftab, pos, [x,y])) e lst
+             | _ => raise Error("Reduce: Wrong argument: " ^ppVal 0 arr, pos)
+        end
+\end{verbatim}
+\subsubsection{TypeChecker.sml}
+For our typechecker, we first need to check that our array expression truly is an array, if not we raise an error. Then we check the function argument, and if wrong type, raise error, lastly we check if our element type is the same as the function argument (and n_exp has the same type as the f_arg in the reduce case). If they are we can continue to the codegen.
+\begin{verbatim}
+    | In.Map (f, arr_exp, _, _, pos)
+      => let val (a_type, arr_exp_dec) = checkExp ftab vtab arr_exp
+             val e_type = 
+              case a_type of Array r => r
+                          |  _ => raise Error("Map: wrong argument type " ^ ppType a_type, pos)
+             val (f', f_ret, f_arg) = 
+              case checkFunArg (f, vtab, ftab, pos) of
+                (f', ret, [t]) => (f', ret, t)
+               | (_,  ret, args) => raise Error("Map: wrong argument type " ^ ppType e_type, pos)
+          in if e_type = f_arg 
+             then (Array f_ret, Out.Map (f', arr_exp_dec, e_type, f_ret, pos))
+             else raise Error ("Map: incompatible arguments " ^ ppType e_type, pos)
+          end
+          
+    | In.Reduce (f, n_exp, arr_exp, _, pos)
+      => let val (a_type, arr_exp_dec) = checkExp ftab vtab arr_exp
+             val e_type = 
+              case a_type of Array r => r
+                          |  _ => raise Error("Reduce: wrong argument type " ^ ppType a_type, pos)
+             val (n_type, n_exp_dec) = checkExp ftab vtab n_exp
+             val (f', f_ret, f_arg) = 
+              case checkFunArg (f, vtab, ftab, pos) of
+                (f', ret, [t]) => (f', ret, t)
+               | (_,  ret, args) => raise Error("Reduce: wrong argument type " ^ ppType e_type, pos)
+          in if (e_type = f_arg andalso n_type = f_arg)
+             then (e_type, Out.Reduce (f', n_exp_dec, arr_exp_dec, e_type, pos))
+             else raise Error ("Reduce: incompatible arguments " ^ ppType e_type, pos)
+          end
+\end{verbatim}
+
+\clearpage
+\subsubsection{CodeGen.sml}
+z
+\subsubsection{Tests}
+\subsection{Binary operators}
+Unfortunately we did not get around to this, and all we managed to do was implement the unknown BinOp in the parser.
+\section{Task 3}
+
+
 \end{document}

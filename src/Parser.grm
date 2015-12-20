@@ -14,8 +14,7 @@ open Fasto.UnknownTypes
 %token <(int*int)> PLUS MINUS DEQ EQ LTH MULT DIV //modified
 %token <(int*int)> LPAR RPAR LBRACKET RBRACKET LCURLY RCURLY
 %token <(int*int)> COMMA
-%token <(int*int)> FUN READ WRITE
-%token <(int*int)> IOTA MAP REDUCE //added
+%token <(int*int)> FUN READ WRITE IOTA MAP REDUCE // modified
 
 
 %nonassoc ifprec letprec

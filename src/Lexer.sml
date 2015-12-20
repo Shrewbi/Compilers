@@ -44,9 +44,9 @@ local open Obj Lexing in
 (* specials: *)
        | "read"         => Parser.READ pos
        | "write"        => Parser.WRITE pos
-       | "iota"         => Parser.IOTA pos (*added*)
-       | "map"          => Parser.MAP pos (*added*)
-       | "reduce"       => Parser.REDUCE pos (*added*)
+       | "iota"         => Parser.IOTA pos             (*added*)
+       | "map"          => Parser.MAP pos              (*added*)
+       | "reduce"       => Parser.REDUCE pos           (*added*)
        | _              => Parser.ID (s, pos)
 
  
