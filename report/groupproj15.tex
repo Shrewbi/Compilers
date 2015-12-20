@@ -266,7 +266,7 @@ We added cases to the "checkExp" function to handle not ("Not") and negate ("Neg
           end
 \end{verbatim}
 \subsubsection{CodeGen.sml}
-We implemented NOT as well as NEGATE evaluations by adding them to the "compileExp" function. \\
+We implemented "NOT" as well as "NEGATE" evaluations by adding them to the "compileExp" function. \\
 
 For the "NOT" case we use the Mips instruction "XORI" on the boolean expression \(t\) and the value 1. Because "XORI" will return true if, and only if, exactly one of the two expressions is true, and false otherwise, invoking it with one fixed, true expression means that if \(t\) is false, "XORI" returns true, vice versa. \\
 
@@ -331,7 +331,9 @@ We added cases to the "evalExp" function to handle map ("Map") as well as reduce
         end
 \end{verbatim}
 \subsubsection{TypeChecker.sml}
-We added cases to the "checkExp" function to handle not ("Not") and negate ("Negate"). They take as parameters an expression and a position. Then the "checkExp" function is invoked on the expression to ensure that it has the type boolean or integer respectively.
+We added cases to the "evalExp" function to handle map ("Map") as well as reduce ("Reduce"). Map takes as parameters a function argument, an array expression position and two symbol tables. Reduce takes as parameters a function argument, an initial value, an array expression, a type expression, a position and two symbol tables.\\
+
+We then evaluate the expressions of both function and array expressions to make sure they match. Anonymous functions are accounted for by use of a helper function called "checkFunArg", which handles both Lambda and standard functions. 
 \begin{verbatim}
     | In.Map (f, arr_exp, _, _, pos)
       => let val (a_type, arr_exp_dec) = checkExp ftab vtab arr_exp
@@ -363,9 +365,120 @@ We added cases to the "checkExp" function to handle not ("Not") and negate ("Neg
           end
 \end{verbatim}
 \subsubsection{CodeGen.sml}
+We implemented "MAP" as well as "REDUCE" evaluations by adding them to the "compileExp" function. \\
 
-% Min compiler døde her, så kan ikke texe mere
+We initialize labels to help control the flow of the function. We iterate over the size of the array, and as the loop header we have used "BGEZ" instruction in Mips to check for remaining, previously unencountered elements in the array before each iteration. \\
 
+Then in the loop body we apply the function to the element we are currently evaluating and storing the result in a register labeled "res\(\_\)reg". We account for different datatypes and their difference in size by use of the function "getElemSize", and a case struct which uses "LB" or "LW" instructions in Mips depending on the data size we are working on.
+\begin{verbatim}
+  | Map (farg, arr_exp, elem_type, ret_type, pos) =>
+    let val size_reg = newName "size_reg"
+        val arr_reg  = newName "arr_reg"
+        val elem_reg = newName "elem_reg"
+        val addr_reg = newName "addr_reg"
+        val i_reg    = newName "i_reg"
+        val tmp_reg  = newName "tmp_reg"
+        val loop_beg = newName "loop_beg"
+        val loop_end = newName "loop_end"
+        val res_reg  = newName "res_reg"
+        val arr_code = compileExp arr_exp vtable arr_reg
+
+        val get_size = [ Mips.LW (size_reg, arr_reg, "0")]
+        val init_regs = [ Mips.ADDI (addr_reg, place, "4")
+                        , Mips.MOVE (i_reg, "0")
+                        , Mips.ADDI (elem_reg, arr_reg, "4") ]
+        val loop_header = [ Mips.LABEL (loop_beg)
+                          , Mips.SUB (tmp_reg, i_reg, size_reg)
+                          , Mips.BGEZ (tmp_reg, loop_end) ]
+
+        val loop_map0 = case getElemSize elem_type of
+			    One  => Mips.LB(res_reg, elem_reg, "0")::
+				          applyFunArg(farg, [res_reg], vtable, res_reg, pos)
+				          @ [ Mips.ADDI(elem_reg, elem_reg, "1")]
+			  | Four => Mips.LW(res_reg, elem_reg, "0")::
+				          applyFunArg(farg, [res_reg], vtable, res_reg, pos)
+				          @ [ Mips.ADDI(elem_reg, elem_reg, "4")]
+
+	      val loop_map1 = case getElemSize elem_type of
+			     One  => [ Mips.SB(res_reg, elem_reg, "0") ]
+			  |  Four => [ Mips.SW(res_reg, elem_reg, "0") ]
+
+        val loop_footer = [ Mips.ADDI (addr_reg, addr_reg, "4")
+                          , Mips.ADDI (i_reg, i_reg, "1")
+                          , Mips.J (loop_beg)
+                          , Mips.LABEL (loop_end)]
+    in arr_code
+	    @ get_size
+      @ dynalloc(size_reg, place, ret_type)
+      @ init_regs
+      @ loop_header
+      @ loop_map0
+	    @ loop_map1
+      @ loop_footer
+      end
+
+
+  (* reduce(f, acc, {x1, x2, ...}) = f(..., f(x2, f(x1, acc))) *)
+  | Reduce (binop, acc_exp, arr_exp, tp, pos) =>
+    let val size_reg = newName "size_reg"
+        val arr_reg  = newName "arr_reg"
+        val addr_reg = newName "addr_reg"
+        val i_reg    = newName "i_reg"
+        val tmp_reg  = newName "tmp_reg"
+        val loop_beg = newName "loop_beg"
+        val loop_end = newName "loop_end"
+        val arr_code = compileExp arr_exp vtable arr_reg
+        val acc_code = compileExp acc_exp vtable arr_reg
+
+        
+        val get_size = [ Mips.LW (size_reg, arr_reg, "0")]
+
+        val init_regs = [ Mips.ADDI (addr_reg, place, "4")
+                        , Mips.MOVE (i_reg, "0") ]
+
+
+        val loop_header = [ Mips.LABEL (loop_beg)
+                          , Mips.SUB   (tmp_reg, i_reg, size_reg)
+                          , Mips.BGEZ  (tmp_reg, loop_end) ]
+
+        val loop_reduce = case getElemSize tp of
+          One  => Mips.LB(tmp_reg, arr_reg, "0")::
+                  applyFunArg(binop, [place, tmp_reg], vtable, place, pos)
+                  @ [ Mips.ADDI(arr_reg, arr_reg, "1")]
+        | Four  => Mips.LB(tmp_reg, arr_reg, "0")::
+                  applyFunArg(binop, [place, tmp_reg], vtable, place, pos)
+                  @ [ Mips.ADDI(arr_reg, arr_reg, "4")]
+
+        val loop_footer = [ Mips.ADDI (addr_reg, addr_reg, "4")
+                          , Mips.ADDI (i_reg, i_reg, "1")
+                          , Mips.J (loop_beg)
+                          , Mips.LABEL (loop_end)]
+
+    in arr_code
+      @ get_size
+      @ acc_code
+      @ dynalloc(size_reg, place, Int)
+      @ init_regs
+      @ loop_header
+      @ loop_reduce
+      @ loop_footer
+      end
+
+(* Lambda helper function *)
+
+and applyFunArg (FunName s, args, vtable, place, pos) : Mips.Prog =
+      let val tmp_reg = newName "tmp_reg"
+      in  applyRegs(s, args, tmp_reg, pos) @ [Mips.MOVE(place, tmp_reg)] end
+
+    | applyFunArg (Lambda (_, params, body, fpos), args, vtable, place, pos) =
+      let val tmp_reg = newName "tmp_reg"
+          fun bindArgToVtable (Param(pn, pt), arg, vtable) = SymTab.bind pn arg vtable
+          val vtable' = ListPair.foldr bindArgToVtable vtable (params, args)
+          val code = compileExp body vtable' tmp_reg
+      in
+         code @ [Mips.MOVE(place, tmp_reg)]
+      end
+\end{verbatim}
 \subsubsection{Tests}
 \subsection{Binary operators}
 Unfortunately we did not get around to this, and all we managed to do was implement the unknown BinOp in the parser.
