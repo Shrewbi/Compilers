@@ -131,7 +131,7 @@ fun dynalloc (size_reg : string,
     end
 
 (* Pushing arguments on the stack: *)
-(* For each register 'r' in 'rs', copy them to registers froeeeem
+(* For each register 'r' in 'rs', copy them to registers from
 'firstReg' and counting up. Return the full code and the next unused
 register (firstReg + num_args).  *)
 fun applyRegs( fid: string,
@@ -153,7 +153,7 @@ fun applyRegs( fid: string,
 (* Compile 'e' under bindings 'vtable', putting the result in its 'place'. *)
 fun compileExp e vtable place =
   case e of
-    Constant (IntVal n, pos) =>
+      Constant (IntVal n, pos) =>
       if n < 0 then
           compileExp (Negate (Constant (IntVal (~n), pos), pos)) vtable place
       else if n < 32768 then
