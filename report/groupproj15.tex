@@ -17,29 +17,26 @@
 \maketitle
 
 \section{Introduction}
-We have decided to divide this report into three parts, one for each task. Each of this parts will then cover the different implementations we have made, the changes we have made to the different files, as well as any problems we may have encountered.
+We have decided to divide this report into three parts, one for each task. Each of these parts will then cover the different implementations we have made, the changes we have made to the different files, as well as any problems we may have encountered.
 \section{Warm up implementations}
 For the first task of the assignment we were asked to implement multiplication, division, boolean operators and literals. We have modified the following files: Lexer.lex, Parser.grm, Interpreter.sml, TypeChecker.sml and CodeGen.sml.
 \subsection{Boolean literals}
 \subsubsection{Lexer.lex}
-
-We added "true" and "false" by adding the tokens known as TRUE and FALSE. These both take a position as their only argument.
+We added "true" and "false" by adding the tokens known as "TRUE" and "FALSE". 
 \begin{verbatim}
     | "true"    => Parser.TRUE pos
     | "false"   => Parser.FALSE pos
 \end{verbatim}
 \subsubsection{Parser.grm}
-We added a token "BOOLVAL" to the list and defined it to take two arguments; a boolean value and a position, which is a tuple of integers:
+We modified the token that handles many other keywords such as "if", "then", "else", etc. to also handle "true" and "false": 
 \begin{verbatim}
-%token <(int*int)> TRUE FALSE
+%token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND OR NOT NEGATE TRUE FALSE
 \end{verbatim}
-
-We now need to add these to their expression cases. Since they are booleans and constants, they don't take any expressions, and results to the following:
+We now need to add these to their expression cases. Since they are boolean constants, they take no expressions, and this gives us to the following:
 \begin{verbatim}
         | TRUE             { Constant(BoolVal(true), $1)  }
         | FALSE            { Constant(BoolVal(false), $1) }
 \end{verbatim}
-
 \subsubsection{Interpreter.sml}
 No modifications were needed in this file. 
 \subsubsection{TypeChecker.sml}
@@ -53,13 +50,13 @@ We implemented booleans in the "Constant" case of the "compileExp" function. It 
 \end{verbatim}
 \subsection{Multiplication and division}
 \subsubsection{Lexer.lex}
-We added "*" and "/" cases to the keyword function. We assume the implementation in the parser phase takes a single argument; its position which is a tuple of integers:
+We added "*" and "/" by adding the tokens known as "MULT" and "DIV". 
 \begin{verbatim}
        | "*"            => Parser.MULT pos
        | "/"            => Parser.DIV pos
 \end{verbatim}
 \subsubsection{Parser.grm}
-We modified the token that handles the binary operators such as plus and minus etc. to also handle multiplication and division: 
+We modified the token that handles the binary operators such as "plus" and "minus" etc. to also handle multiplication and division: 
 \begin{verbatim}
 %token <(int*int)> PLUS MINUS DEQ EQ LTH MULT DIV 
 \end{verbatim}
@@ -118,21 +115,19 @@ We implemented multiplication and division by adding them as cases to the "compi
 \end{verbatim}
 \subsubsection{Tests}
 
-
 \subsection{AND and OR}
 \subsubsection{Lexer.lex}
-We added "and" as well as "or" as symbols instead of text as "and" as well as "or" usually is being used with a different meaning when writing SML.
+We added "and" and "or" by adding the symbols "\(\&\&\)" and "||". 
 \begin{verbatim}
   | "&&"                { Parser.AND    (getPos lexbuf) }
   | "||"                { Parser.OR     (getPos lexbuf) }
 \end{verbatim}
 \subsubsection{Parser.grm}
-We modified the token that handles if-then-else statements to also handle AND as well as OR
+We modified the token that handles many other keywords such as "if", "then", "else", etc. to also handle "and" and "or":
 \begin{verbatim}
-%token <(int*int)> AND OR
+%token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND OR NOT NEGATE TRUE FALSE
 \end{verbatim}
-We followed the plus and minus case and determined that we needed to implement associatives for the tokens.
-thus:
+We then added associativity for both of them: 
 \begin{verbatim}
 %left  OR AND
 \end{verbatim}
@@ -141,10 +136,8 @@ In order for the two expressions to work, they need to be implemented as express
         | Exp AND     Exp  { And    ($1, $3, $2) }
         | Exp OR      Exp  { Or     ($1, $3, $2) }
 \end{verbatim}
-
 \subsubsection{Interpreter.sml}
-We added cases to the "evalExp" function to handle AND (And) as well as OR (Or). They take as parameters two expressions, a position and two symbol tables. They then evaluate the two expressions and make sure that we are dealing with BoolVals, before carrying out the operation:
-
+We added cases to the "evalExp" function to handle AND ("And") as and OR ("Or"). They take as parameters two expressions, a position and two symbol tables. They then evaluate the two expressions and make sure that we are dealing with BoolVals, before carrying out the operation:
 \begin{verbatim}
   | evalExp (And (e1, e2, pos), vtab, ftab) =
         let val res1   = evalExp(e1, vtab, ftab)
@@ -155,9 +148,7 @@ We added cases to the "evalExp" function to handle AND (And) as well as OR (Or).
             | _ => invalidOperands "And on non-integral args: "
                    [(Bool, Bool)] res1 res2 pos
         end
-\end{verbatim}
-\clearpage
-\begin{verbatim}
+
   | evalExp (Or (e1, e2, pos), vtab, ftab) =
         let val res1   = evalExp(e1, vtab, ftab)
             val res2   = evalExp(e2, vtab, ftab)
@@ -168,11 +159,8 @@ We added cases to the "evalExp" function to handle AND (And) as well as OR (Or).
                    [(Bool, Bool)] res1 res2 pos
         end
 \end{verbatim}
-
 \subsubsection{TypeChecker.sml}
-In the typechecker we check if e1 is a boolean, this is done to short-circuit. If e1 is a boolean, then e2 is checked in the case of being another boolean. If it is then we continue on, else we raise an error
-
-
+We added cases to the "checkExp" function to handle and ("And") and or ("Or"). They take as parameters two expressions and a position. Then the "evalExp" function is invoked on the first expression to ensure that it has the type boolean. This is done to maintain a short circuit structure, as if the first expression is not a boolean, there is no need to evaluate the second. We then proceed to type check the second expression in the same way. 
 \begin{verbatim}
     | In.And (e1, e2, pos)
       => let val (t1, e1_dec) = checkExp ftab vtab e1
@@ -193,7 +181,11 @@ In the typechecker we check if e1 is a boolean, this is done to short-circuit. I
           end
 \end{verbatim}
 \subsubsection{CodeGen.sml}
-We implemented AND as well as OR evaluations by adding them to the "compileExp" function. For the "AND" case, we first create a "falseLabel" which marks a false evaluation. We then load the value 0 as we assume the expression returns false. We then use the "BEQ" instruction in Mips to see if \(t1 = 0\) (using the \(\$0\) register in Mips), in which case we know to the "AND" expression can only return false, and we jump to the "falseLabel". This is to maintain a short circuit structure. We then use the "BNE" instruction to see if \(t1\neq t2\). Since we know at this point that \(t1\) is true, if this returns true, then \(t2\) must be false, and we jump to the "falseLabel". 
+We implemented "AND" as well as "OR" expressions by adding them to the "compileExp" function.\\
+
+For the "AND" case, we first create a "falseLabel" which marks a false evaluation. We then load the value 0 as we assume the expression returns false. We then use the "BEQ" instruction in Mips to see if \(t1 = 0\) (using the \(\$0\) register in Mips), in which case we know the "AND" expression can only return false, and we jump to the "falseLabel". This is to maintain a short circuit structure. We then use the "BNE" instruction to see if \(t1\neq t2\). Since we know at this point that \(t1\) is true, if this returns true, then \(t2\) must be false, and we jump to the "falseLabel". \\
+
+For the "OR" case, we first create a "trueLabel" which marks a true evaluation. We then load the value 1 as we assume the expression returns true. We then use use the "BNE" instruction in Mips to see if \(t1 \neq 0\), in which case we know the "OR" expression can only return true, and we jump to the "trueLabel". We then use the sae instruction to see if \(t1\neq t2\). Since we know at this point that \(t1\) is false, if this returns false, then \(t2\) must be true, and we jump to the "trueLabel". 
 \begin{verbatim}
   | And (e1, e2, pos) =>
       let val t1 = newName "and_L"
@@ -225,37 +217,33 @@ We implemented AND as well as OR evaluations by adding them to the "compileExp" 
 
 \end{verbatim}
 \subsubsection{Tests}
+
 \subsection{Not and negation}
 \subsubsection{Lexer.lex}
-We added not and negate to our lexer file by using the symbols "!" and "$\sim$" respectively. There was no mention of this in the assignment, so we felt this would be most logical, seeing how these are already the recognized as their respective symbols in a lot of programming languages.
+We added "not" and "negate" by adding the symbols "!" and "$\sim$".
 \subsubsection{Parser.grm}
-We modified the token that handles if-then-else statements to also handle NOT as well as NEGATE
+We modified the token that handles many other keywords such as "if", "then", "else", etc. to also handle "not" and "negate":
 \begin{verbatim}
-%token <(int*int)> NOT NEGATE
+%token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND OR NOT NEGATE TRUE FALSE
 \end{verbatim}
-
-By using the same logic for plus and minus we had to add a precedence to our NOT and NEGATE cases. These are done as so
+We then added associativity for both of them: 
 \begin{verbatim}
 %nonassoc NEGATE NOT
 \end{verbatim}
-And just as well, we need to add them in their expression cases as well. These only take one expression which differs from the previous ones
+In order for the two expressions to work, they need to be implemented as expressions later on in the parser. We have done this by doing the following:
 \begin{verbatim}
         | NOT         Exp  { Not    ($2, $1)     }
         | NEGATE      Exp  { Negate ($2, $1)     }
 \end{verbatim}
-
-
 \subsubsection{Interpreter.sml}
-We added cases to the "evalExp" function to handle NOT (Not) as well as NEGATE (Negate). They take as parameters an expression, a position and two symbol tables. They then evaluate the expression and make sure that we are dealing with a BoolVal in \textbf{Not}, and an IntVal in \textbf{Negate}, before carrying out the operation:
-
+We added cases to the "evalExp" function to handle not ("Not") as well as negate ("Negate"). They take as parameters an expression, a position and two symbol tables. They then evaluate the expression and make sure that we are dealing with a boolean or integer respectively, before carrying out the operation:
 \begin{verbatim}
   | evalExp ( Not(e, pos), vtab, ftab ) =
         let val res = evalExp(e, vtab, ftab)
         in case res of BoolVal n => BoolVal(if n = true then false else true)
             | _ => invalidOperands "Not on non-boolean arg: " [(Bool, Bool)] res res pos
-Dr        end
-\end{verbatim}
-\begin{verbatim}
+        end
+
   | evalExp ( Negate(e, pos), vtab, ftab ) =
         let val res = evalExp(e, vtab, ftab)
         in case res of IntVal n => IntVal(0-n)
@@ -263,7 +251,7 @@ Dr        end
         end
 \end{verbatim}
 \subsubsection{TypeChecker.sml}
-For the first case, not, we check if the expression is a boolean, if it is carry on, else raise error. In the second case of negate, we check if the expression is an integer, if it is we carry on.
+We added cases to the "checkExp" function to handle not ("Not") and negate ("Negate"). They take as parameters an expression and a position. Then the "checkExp" function is invoked on the expression to ensure that it has the type boolean or integer respectively.
 \begin{verbatim}
     | In.Not (e, pos)
       => let val (t, e_dec) = checkExp ftab vtab e
@@ -278,25 +266,18 @@ For the first case, not, we check if the expression is a boolean, if it is carry
           end
 \end{verbatim}
 \subsubsection{CodeGen.sml}
-We implemented NOT as well as NEGATE evaluations by adding them to the "compileExp" function. It then evaluates each expression and invokes the following mips instructions:
+We implemented NOT as well as NEGATE evaluations by adding them to the "compileExp" function. \\
 
-\textbf{NOT}
-\begin{verbatim}
-          [Mips.XORI (place,t, "1")]
-\end{verbatim}
+For the "NOT" case we use the Mips instruction "XORI" on the boolean expression \(t\) and the value 1. Because "XORI" will return true if, and only if, exactly one of the two expressions is true, and false otherwise, invoking it with one fixed, true expression means that if \(t\) is false, "XORI" returns true, vice versa. \\
 
-\textbf{OR}
-\begin{verbatim}
-          [Mips.SUB (place, "$0", t)]
-\end{verbatim}
-\clearpage
-\textbf{Full code:}
+For the "NEGATE" case we use the Mips instruction "SUB" to subtract the integer \(t\) from the value 0. 
 \begin{verbatim}
   | Not (e', pos) =>
       let val t = newName "not_arg"
           val code = compileExp e' vtable t
-      in code @ [Mips.XORI (place,t, "1")]
+      in code @ [Mips.XORI (place, t, "1")]
       end
+      
   | Negate (e', pos) =>
       let val t = newName "not_arg"
           val code = compileExp e' vtable t
@@ -304,20 +285,20 @@ We implemented NOT as well as NEGATE evaluations by adding them to the "compileE
       end
 \end{verbatim}
 \subsubsection{Tests}
+
 \subsection{MAP and REDUCE}
 \subsubsection{Lexer.lex}
-In the lexer we added the required tokens for both map and reduce to work
+We added "map" and "reduce" by adding the tokens known as "MAP" and "REDUCE".
 \begin{verbatim}
        | "map"          => Parser.MAP pos
        | "reduce"       => Parser.REDUCE pos
 \end{verbatim}
 \subsubsection{Parser.grm}
-In the parser, we initialize by reading the tokens from the lexer, it takes a position and is done by doing the following:
+We added a token that handles "map" and "reduce":
 \begin{verbatim}
 %token <(int*int)> MAP REDUCE
 \end{verbatim}
-
-Then, the expression cases are written with the correct registers and paranthesis as well as commas. This is done like so:
+In order for the two expressions to work, they need to be implemented as expressions later on in the parser. We have done this by doing the following:
 \begin{verbatim}
         | MAP LPAR FunArg COMMA Exp RPAR
                         { Map ($3, $5, (), (),  $1) }
@@ -325,10 +306,8 @@ Then, the expression cases are written with the correct registers and paranthesi
         | REDUCE LPAR FunArg COMMA Exp COMMA Exp RPAR
                         { Reduce ($3, $5, $7, (), $1)}
 \end{verbatim}
-
 \subsubsection{Interpreter.sml}
-Next, we implement map and reduce in our interpreter
-
+We added cases to the "evalExp" function to handle map ("Map") as well as reduce ("Reduce"). Map takes as parameters a function argument, an array expression position and two symbol tables. Reduce takes as parameters a function argument, an initial value, an array expression, a type expression, a position and two symbol tables. They then evaluate the evaluate the function and array expressions and make sure the types match.
 \begin{verbatim}
   | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) =
         let val arr  = evalExp(arrexp, vtab, ftab)
@@ -352,7 +331,7 @@ Next, we implement map and reduce in our interpreter
         end
 \end{verbatim}
 \subsubsection{TypeChecker.sml}
-For our typechecker, we first need to check that our array expression truly is an array, if not we raise an error. Then we check the function argument, and if wrong type, raise error, lastly we check if our element type is the same as the function argument (and n_exp has the same type as the f_arg in the reduce case). If they are we can continue to the codegen.
+We added cases to the "checkExp" function to handle not ("Not") and negate ("Negate"). They take as parameters an expression and a position. Then the "checkExp" function is invoked on the expression to ensure that it has the type boolean or integer respectively.
 \begin{verbatim}
     | In.Map (f, arr_exp, _, _, pos)
       => let val (a_type, arr_exp_dec) = checkExp ftab vtab arr_exp

@@ -1,14 +1,14 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.9.4)  20 DEC 2015 12:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Arch Linux) (preloaded format=pdflatex 2015.12.20)  20 DEC 2015 18:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **groupproj15.tex
-(/home/brintos/OV/report/groupproj15.tex
-LaTeX2e <2014/05/01>
-Babel <3.9l> and hyphenation patterns for 79 languages loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+(./groupproj15.tex
+LaTeX2e <2015/10/01> patch level 2
+Babel <3.9m> and hyphenation patterns for 79 languages loaded.
+(/usr/share/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
+(/usr/share/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -23,23 +23,25 @@ File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
-Package: inputenc 2014/04/30 v1.2b Input encoding file
+(/usr/share/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2015/03/17 v1.2c Input encoding file
 \inpenc@prehook=\toks14
 \inpenc@posthook=\toks15
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
-File: utf8.def 2014/09/29 v1.1m UTF-8 support for inputenc
+(/usr/share/texmf-dist/tex/latex/base/utf8.def
+File: utf8.def 2015/09/07 v1.1p UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu
-File: t1enc.dfu 2014/09/29 v1.1m UTF-8 support for inputenc
+(/usr/share/texmf-dist/tex/latex/base/t1enc.dfu
+File: t1enc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
+   defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
    defining Unicode char U+00AB (decimal 171)
+   defining Unicode char U+00AD (decimal 173)
    defining Unicode char U+00BB (decimal 187)
    defining Unicode char U+00BF (decimal 191)
    defining Unicode char U+00C0 (decimal 192)
@@ -160,6 +162,10 @@ File: t1enc.dfu 2014/09/29 v1.1m UTF-8 support for inputenc
    defining Unicode char U+016F (decimal 367)
    defining Unicode char U+0170 (decimal 368)
    defining Unicode char U+0171 (decimal 369)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
    defining Unicode char U+0178 (decimal 376)
    defining Unicode char U+0179 (decimal 377)
    defining Unicode char U+017A (decimal 378)
@@ -167,6 +173,10 @@ File: t1enc.dfu 2014/09/29 v1.1m UTF-8 support for inputenc
    defining Unicode char U+017C (decimal 380)
    defining Unicode char U+017D (decimal 381)
    defining Unicode char U+017E (decimal 382)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
    defining Unicode char U+200C (decimal 8204)
    defining Unicode char U+2013 (decimal 8211)
    defining Unicode char U+2014 (decimal 8212)
@@ -185,10 +195,12 @@ File: t1enc.dfu 2014/09/29 v1.1m UTF-8 support for inputenc
 Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu
-File: ot1enc.dfu 2014/09/29 v1.1m UTF-8 support for inputenc
+(/usr/share/texmf-dist/tex/latex/base/ot1enc.dfu
+File: ot1enc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
+   defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AD (decimal 173)
    defining Unicode char U+00B8 (decimal 184)
    defining Unicode char U+00BF (decimal 191)
    defining Unicode char U+00C5 (decimal 197)
@@ -206,6 +218,14 @@ File: ot1enc.dfu 2014/09/29 v1.1m UTF-8 support for inputenc
    defining Unicode char U+0142 (decimal 322)
    defining Unicode char U+0152 (decimal 338)
    defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
    defining Unicode char U+2013 (decimal 8211)
    defining Unicode char U+2014 (decimal 8212)
    defining Unicode char U+2018 (decimal 8216)
@@ -216,8 +236,8 @@ File: ot1enc.dfu 2014/09/29 v1.1m UTF-8 support for inputenc
 Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu
-File: omsenc.dfu 2014/09/29 v1.1m UTF-8 support for inputenc
+(/usr/share/texmf-dist/tex/latex/base/omsenc.dfu
+File: omsenc.dfu 2015/09/07 v1.1p UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
    defining Unicode char U+00B7 (decimal 183)
@@ -240,14 +260,14 @@ Now handling font encoding U ...
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def
+(/usr/share/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty
+(/usr/share/texmf-dist/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \enitkv@toks@=\toks16
 \labelindent=\skip43
@@ -256,42 +276,41 @@ Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \enit@inbox=\box26
 \enitdp@description=\count87
 )
-(/usr/share/texlive/texmf-dist/tex/latex/mdwtools/mdwlist.sty
+(/usr/share/texmf-dist/tex/latex/mdwtools/mdwlist.sty
 Package: mdwlist 1996/05/02 1.1 Various list-related things
 )
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+(/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks18
 )
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/share/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
+(/usr/share/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: pdftex.def on input line 91.
+Package graphics Info: Driver file: pdftex.def on input line 94.
 
-(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+(/usr/share/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+(/usr/share/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count88
 ))
 \Gin@req@height=\dimen104
 \Gin@req@width=\dimen105
-)
-(/home/brintos/OV/report/groupproj15.aux)
+) (./groupproj15.aux)
 \openout1 = `groupproj15.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
@@ -306,8 +325,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+(/usr/share/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count89
 \scratchdimen=\dimen106
@@ -320,15 +338,15 @@ LaTeX Font Info:    ... okay on input line 16.
 \MPnumerator=\count93
 \makeMPintoPDFobject=\count94
 \everyMPtoPDFconversion=\toks20
-) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+) (/usr/share/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+(/usr/share/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 )
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+(/usr/share/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
@@ -337,22 +355,22 @@ Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+(/usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+(/usr/share/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+(/usr/share/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+(/usr/share/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
 Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
@@ -364,7 +382,7 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 452.
 
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
@@ -372,288 +390,271 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 17.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 17.
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 27.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 26.
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+(/usr/share/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (134.74686pt too wide) in paragraph at lines 34--34
+[]\T1/cmtt/m/n/12 %token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND 
+OR NOT NEGATE TRUE FALSE[] 
+ []
+
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 48.
+(Font)              <12> on input line 45.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 48.
+(Font)              <8> on input line 45.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 48.
- [2]
-Overfull \hbox (66.83844pt too wide) in paragraph at lines 86--86
+(Font)              <6> on input line 45.
+[2]
+Overfull \hbox (66.83844pt too wide) in paragraph at lines 83--83
 []            \T1/cmtt/m/n/12 | _ => invalidOperands "Multiplication on non-int
 egral args: "[] 
  []
 
 
-Overfull \hbox (29.79749pt too wide) in paragraph at lines 86--86
+Overfull \hbox (29.79749pt too wide) in paragraph at lines 83--83
 []            \T1/cmtt/m/n/12 | _ => invalidOperands "Division on non-integral 
 args: "[] 
  []
 
 
-Overfull \hbox (5.83942pt too wide) in paragraph at lines 88--89
+Overfull \hbox (5.83942pt too wide) in paragraph at lines 85--86
 \T1/cmr/m/n/12 We added cases to the "check-Exp" func-tion to han-dle mul-ti-pl
 i-ca-tion ("Times")
  []
 
 
-Overfull \hbox (91.53241pt too wide) in paragraph at lines 100--100
+Overfull \hbox (91.53241pt too wide) in paragraph at lines 97--97
 []      \T1/cmtt/m/n/12 => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (
 pos, Int, e1, e2)[] 
  []
 
 [3]
-Overfull \hbox (91.53241pt too wide) in paragraph at lines 100--100
+Overfull \hbox (91.53241pt too wide) in paragraph at lines 97--97
 []      \T1/cmtt/m/n/12 => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (
 pos, Int, e1, e2)[] 
  []
 
 [4]
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 158--158
+Overfull \hbox (134.74686pt too wide) in paragraph at lines 129--129
+[]\T1/cmtt/m/n/12 %token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND 
+OR NOT NEGATE TRUE FALSE[] 
+ []
+
+
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 161--161
 []              \T1/cmtt/m/n/12 (BoolVal n1, BoolVal n2) => if n1 then BoolVal 
 (n1 = n2)[] 
  []
 
 
-Overfull \hbox (17.4505pt too wide) in paragraph at lines 158--158
+Overfull \hbox (17.4505pt too wide) in paragraph at lines 161--161
 []                                                \T1/cmtt/m/n/12 else BoolVal 
 false[] 
  []
 
-[5]
-Overfull \hbox (73.01193pt too wide) in paragraph at lines 170--170
+
+Overfull \hbox (73.01193pt too wide) in paragraph at lines 161--161
 []              \T1/cmtt/m/n/12 (BoolVal n1, BoolVal n2) => if not n1 then Bool
 Val (n1 <> n2)[] 
  []
 
 
-Overfull \hbox (35.97098pt too wide) in paragraph at lines 170--170
+Overfull \hbox (35.97098pt too wide) in paragraph at lines 161--161
 []                                                    \T1/cmtt/m/n/12 else Bool
 Val true[] 
  []
 
-
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 194--194
+[5]
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 182--182
 []             \T1/cmtt/m/n/12 in if t2 = Bool then (Bool, Out.And(e1_dec, e2_d
 ec, pos))[] 
  []
 
 
-Overfull \hbox (54.49146pt too wide) in paragraph at lines 194--194
+Overfull \hbox (54.49146pt too wide) in paragraph at lines 182--182
 []                \T1/cmtt/m/n/12 else raise Error (("Wrong type: " ^ ppType t2
 ), pos) end[] 
  []
 
 
-Overfull \hbox (5.10352pt too wide) in paragraph at lines 194--194
+Overfull \hbox (5.10352pt too wide) in paragraph at lines 182--182
 []            \T1/cmtt/m/n/12 else raise Error (("Wrong type: " ^ ppType t1), p
 os)[] 
  []
 
 
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 194--194
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 182--182
 []              \T1/cmtt/m/n/12 in if t2 = Bool then (Bool, Out.Or(e1_dec, e2_d
 ec, pos))[] 
  []
 
 
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 194--194
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 182--182
 []              \T1/cmtt/m/n/12 else raise Error (("Wrong type: " ^ ppType t2),
  pos) end[] 
  []
 
-[6
 
-] [7]
-Overfull \hbox (85.35892pt too wide) in paragraph at lines 257--257
+Underfull \hbox (badness 10000) in paragraph at lines 184--185
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 186--187
+
+ []
+
+[6] [7]
+Overfull \hbox (134.74686pt too wide) in paragraph at lines 228--228
+[]\T1/cmtt/m/n/12 %token <(int*int)> IF THEN ELSE LET IN INT BOOL CHAR EOF AND 
+OR NOT NEGATE TRUE FALSE[] 
+ []
+
+
+Overfull \hbox (85.35892pt too wide) in paragraph at lines 252--252
 []        \T1/cmtt/m/n/12 in case res of BoolVal n => BoolVal(if n = true then 
 false else true)[] 
  []
 
 
-Overfull \hbox (153.26733pt too wide) in paragraph at lines 257--257
+Overfull \hbox (153.26733pt too wide) in paragraph at lines 252--252
 []            \T1/cmtt/m/n/12 | _ => invalidOperands "Not on non-boolean arg: "
  [(Bool, Bool)] res res pos[] 
  []
 
 [8]
-Overfull \hbox (165.61432pt too wide) in paragraph at lines 264--264
+Overfull \hbox (165.61432pt too wide) in paragraph at lines 252--252
 []            \T1/cmtt/m/n/12 | _ => invalidOperands "Negate on non-integral ar
 g: " [(Int, Int)] res res pos[] 
  []
 
-[9] [10
 
-]
-Overfull \hbox (147.09384pt too wide) in paragraph at lines 353--353
+Underfull \hbox (badness 10000) in paragraph at lines 269--270
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 271--272
+
+ []
+
+[9] [10]
+Overfull \hbox (147.09384pt too wide) in paragraph at lines 332--332
 []               \T1/cmtt/m/n/12 let val mlst = map (fn x => evalFunArg (farg, 
 vtab, ftab, pos, [x])) lst[] 
  []
 
 
-Overfull \hbox (66.83844pt too wide) in paragraph at lines 353--353
+Overfull \hbox (66.83844pt too wide) in paragraph at lines 332--332
 []             \T1/cmtt/m/n/12 | _ => raise Error("Map: Wrong argument: " ^ppVa
 l 0 arr, pos)[] 
  []
 
 
-Overfull \hbox (5.10352pt too wide) in paragraph at lines 353--353
+Overfull \hbox (5.10352pt too wide) in paragraph at lines 332--332
 []  \T1/cmtt/m/n/12 | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab 
 ) =[] 
  []
 
 
-Overfull \hbox (116.22638pt too wide) in paragraph at lines 353--353
+Overfull \hbox (116.22638pt too wide) in paragraph at lines 332--332
 []               \T1/cmtt/m/n/12 foldl (fn (x,y) => evalFunArg (farg, vtab, fta
 b, pos, [x,y])) e lst[] 
  []
 
 
-Overfull \hbox (85.35892pt too wide) in paragraph at lines 353--353
+Overfull \hbox (85.35892pt too wide) in paragraph at lines 332--332
 []             \T1/cmtt/m/n/12 | _ => raise Error("Reduce: Wrong argument: " ^p
 pVal 0 arr, pos)[] 
  []
 
-! Missing $ inserted.
-<inserted text> 
-                $
-l.355 ...the same as the function argument (and n_
-                                                  exp has the same type as t...
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.356 \begin{verbatim}
-                      
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.356 \begin{verbatim}
-                      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-Overfull \hbox (183.14186pt too wide) in paragraph at lines 355--356
-\T1/cmr/m/n/12 func-tion ar-gu-ment (and n$[]\OML/cmm/m/it/12 xphasthesametypea
-sthef[]rginthereducecase\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 :Iftheyarewecancontin
-uetothecodegen:$ 
- []
-
-
-Overfull \hbox (23.624pt too wide) in paragraph at lines 385--385
+[11]
+Overfull \hbox (23.624pt too wide) in paragraph at lines 364--364
 []      \T1/cmtt/m/n/12 => let val (a_type, arr_exp_dec) = checkExp ftab vtab a
 rr_exp[] 
  []
 
 
-Overfull \hbox (196.48178pt too wide) in paragraph at lines 385--385
+Overfull \hbox (196.48178pt too wide) in paragraph at lines 364--364
 []                          \T1/cmtt/m/n/12 |  _ => raise Error("Map: wrong arg
 ument type " ^ ppType a_type, pos)[] 
  []
 
 
-Overfull \hbox (208.82877pt too wide) in paragraph at lines 385--385
+Overfull \hbox (208.82877pt too wide) in paragraph at lines 364--364
 []               \T1/cmtt/m/n/12 | (_,  ret, args) => raise Error("Map: wrong a
 rgument type " ^ ppType e_type, pos)[] 
  []
 
-[11]
-Overfull \hbox (91.53241pt too wide) in paragraph at lines 385--385
+
+Overfull \hbox (91.53241pt too wide) in paragraph at lines 364--364
 []             \T1/cmtt/m/n/12 then (Array f_ret, Out.Map (f', arr_exp_dec, e_t
 ype, f_ret, pos))[] 
  []
 
 
-Overfull \hbox (122.39987pt too wide) in paragraph at lines 385--385
+Overfull \hbox (122.39987pt too wide) in paragraph at lines 364--364
 []             \T1/cmtt/m/n/12 else raise Error ("Map: incompatible arguments "
  ^ ppType e_type, pos)[] 
  []
 
 
-Overfull \hbox (23.624pt too wide) in paragraph at lines 385--385
+Overfull \hbox (23.624pt too wide) in paragraph at lines 364--364
 []      \T1/cmtt/m/n/12 => let val (a_type, arr_exp_dec) = checkExp ftab vtab a
 rr_exp[] 
  []
 
 
-Overfull \hbox (215.00226pt too wide) in paragraph at lines 385--385
+Overfull \hbox (215.00226pt too wide) in paragraph at lines 364--364
 []                          \T1/cmtt/m/n/12 |  _ => raise Error("Reduce: wrong 
 argument type " ^ ppType a_type, pos)[] 
  []
 
 
-Overfull \hbox (227.34924pt too wide) in paragraph at lines 385--385
+Overfull \hbox (227.34924pt too wide) in paragraph at lines 364--364
 []               \T1/cmtt/m/n/12 | (_,  ret, args) => raise Error("Reduce: wron
 g argument type " ^ ppType e_type, pos)[] 
  []
 
 
-Overfull \hbox (103.8794pt too wide) in paragraph at lines 385--385
+Overfull \hbox (103.8794pt too wide) in paragraph at lines 364--364
 []             \T1/cmtt/m/n/12 then (e_type, Out.Reduce (f', n_exp_dec, arr_exp
 _dec, e_type, pos))[] 
  []
 
 
-Overfull \hbox (140.92035pt too wide) in paragraph at lines 385--385
+Overfull \hbox (140.92035pt too wide) in paragraph at lines 364--364
 []             \T1/cmtt/m/n/12 else raise Error ("Reduce: incompatible argument
 s " ^ ppType e_type, pos)[] 
  []
 
-
-! LaTeX Error: \begin{document} ended by \end{verbatim}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.385 \end{verbatim}
-                    
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-! Extra \endgroup.
-<recently read> \endgroup 
-                          
-l.385 \end{verbatim}
-                    
-Things are pretty mixed up, but I think the worst is over.
-
-
-Overfull \hbox (326.12512pt too wide) in paragraph at lines 392--392
-[]\T1/cmtt/m/n/12 Unfortunately we did not get around to this, and all we manag
-ed to do was implement the unknown BinOp in the parser.[] 
- []
-
-)
-! Emergency stop.
-<*> groupproj15.tex
-                   
-*** (job aborted, no legal \end found)
-
- 
+[12] [13] (./groupproj15.aux) ) 
 Here is how much of TeX's memory you used:
- 2235 strings out of 493105
- 30637 string characters out of 6137073
- 93468 words of memory out of 5000000
- 5676 multiletter control sequences out of 15000+600000
+ 2254 strings out of 493054
+ 30122 string characters out of 6140585
+ 94183 words of memory out of 5000000
+ 5752 multiletter control sequences out of 15000+600000
  13002 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,6n,23p,699b,252s stack positions out of 5000i,500n,10000p,200000b,80000s
-!  ==> Fatal error occurred, no output PDF file produced!
+ 37i,6n,23p,608b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/
+cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pf
+b></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/font
+s/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/
+cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx17
+28.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/sh
+are/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/
+fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texmf-dist/fonts/type1/pub
+lic/cm-super/sftt1200.pfb>
+Output written on groupproj15.pdf (13 pages, 176513 bytes).
+PDF statistics:
+ 88 PDF objects out of 1000 (max. 8388607)
+ 62 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
